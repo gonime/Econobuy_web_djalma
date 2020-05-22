@@ -1,0 +1,13 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
+    if (Session["clienteID"] == null)
+    {
+        Response.Redirect("~/Clinete/Index");
+    }
+    ViewBag.Title = "Home";
+}
+
+<div class="jumbotron text-center col-md-12">
+    <h2>Seja bem-vindo @Session["clienteNome"].ToString()</h2>
+    <p class="lead">Texto</p>
+</div>

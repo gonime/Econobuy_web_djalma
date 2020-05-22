@@ -33,6 +33,7 @@ namespace Econobuy_Web.Models
         public string mer_st_user { get; set; }
         [Display(Name = "Senha")]
         [Required(ErrorMessage = "Este campo é obrigatório")]
+        [DataType(DataType.Password)]
         public string mer_st_senha { get; set; }
         [Display(Name = "CPNJ")]
         [Required(ErrorMessage = "Este campo é obrigatório")]

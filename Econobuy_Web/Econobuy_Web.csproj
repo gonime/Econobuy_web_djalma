@@ -136,6 +136,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CadastroCliente.cs" />
+    <Compile Include="Models\ConsultaPedidosMercado.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -363,6 +365,12 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Cliente\Index.cshtml" />
     <Content Include="Views\Mercado\Index.cshtml" />
+    <Content Include="Views\Mercado\Home.cshtml" />
+    <Content Include="Views\Shared\_LayoutMercado.cshtml" />
+    <Content Include="Views\Cliente\Home.cshtml" />
+    <Content Include="Views\Shared\_LayoutCliente.cshtml" />
+    <Content Include="Views\Cliente\Cadastro.cshtml" />
+    <Content Include="Views\Mercado\ConsultarPedidos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

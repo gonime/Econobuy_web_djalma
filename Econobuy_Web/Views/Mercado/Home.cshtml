@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
+    if (Session["mercadoID"] == null)
+    {
+        Response.Redirect("~/Mercado/Index");
+    }
+    ViewBag.Title = "Home";
+}
+
+<div class="jumbotron text-center col-md-12">
+     <h2>Seja bem-vindo @Session["mercadoNome"].ToString()</h2>
+     <p class="lead">Texto</p>
+</div>
+
+

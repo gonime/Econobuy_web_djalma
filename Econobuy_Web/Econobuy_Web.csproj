@@ -138,6 +138,7 @@
     </Compile>
     <Compile Include="Models\CadastroCliente.cs" />
     <Compile Include="Models\ConsultaPedidosMercado.cs" />
+    <Compile Include="Models\ConsultaProdutos.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -371,6 +372,7 @@
     <Content Include="Views\Shared\_LayoutCliente.cshtml" />
     <Content Include="Views\Cliente\Cadastro.cshtml" />
     <Content Include="Views\Mercado\ConsultarPedidos.cshtml" />
+    <Content Include="Views\Mercado\ConsultarProdutos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -76,7 +76,32 @@ namespace Econobuy_Web.Controllers
 
         public ActionResult ConsultarProdutos()
         {
-            return View();
+            int Id = Convert.ToInt32(Session["mercadoID"]);
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var model = (from prod in db.tb_produto join cat01 
+                             in db.tb_categoria_n01 on prod.cat01_in_codigo
+                             equals cat01.cat01_in_codigo join cat02 in
+                             db.tb_categoria_n02 on prod.cat02_in_codigo
+                             equals cat02.cat02_in_codigo join cat03 in 
+                             db.tb_categoria_n03 on prod.cat03_in_codigo
+                             equals cat03.cat03_in_codigo where
+                             prod.mer_in_codigo == Id
+                             select new ConsultaProdutos
+                             {
+                                 Id = prod.prod_in_codigo,
+                                 Nome = prod.prod_st_nome,
+                                 Preco = prod.prod_dec_valor_un,
+                                 Codigo = prod.prod_st_cod_mer,
+                                 Tradicional = prod.prod_bit_trad_active,
+                                 Ativo = prod.prod_bit_active,
+                                 Categoria_01 = cat01.cat01_st_nome,
+                                 Categoria_02 = cat02.cat02_st_nome,
+                                 Categoria_03 = cat03.cat03_st_nome
+                             }
+                             ).OrderBy(u => u.Nome).ToList();
+                return View(model);
+            }
         }
 
         public ActionResult CadastrarProduto()

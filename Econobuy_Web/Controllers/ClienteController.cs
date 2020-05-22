@@ -29,9 +29,9 @@ namespace Econobuy_Web.Controllers
                 }
                 else
                 {
-                    Session["clienteID"] = user.cli_in_codigo;
-                    Session["clienteNome"] = user.cli_st_nome;
-                    return RedirectToAction("Index", "Home");
+                    Session["clienteID"] = userDetail.cli_in_codigo;
+                    Session["clienteNome"] = userDetail.cli_st_nome;
+                    return RedirectToAction("Home", "Cliente");
                 }
             }
         }

@@ -20,8 +20,8 @@
                     <a>@Html.ActionLink("Consultar Pedidos", "ConsultarPedidos", "Mercado", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
                 </li>
                 <!--<li class="nav-item px-2">
-                    <a>@Html.ActionLink("Avaliações de Clientes", "Index", "Mercado", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
-                </li>-->
+                <a>@Html.ActionLink("Avaliações de Clientes", "Index", "Mercado", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
+            </li>-->
                 <li class="nav-item dropdown px-2">
                     <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Produtos</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -30,13 +30,14 @@
                     </div>
                 </li>
                 <!--<li class="nav-item dropdown px-2">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Relatórios</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item">Produtos</a> <a class="dropdown-item">Pedidos</a> <a class="dropdown-item">Clientes</a>
-                    </div>
-                </li>-->
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown">Relatórios</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item">Produtos</a> <a class="dropdown-item">Pedidos</a> <a class="dropdown-item">Clientes</a>
+                </div>
+            </li>-->
             </ul>
         </div>
+        <button class="btn btn-success ml-auto mr-1">@Html.ActionLink("Logout", "Logout", "Mercado", new { area = "" }, new { @style = "color: black; text-decoration:none; " })</button>
     </nav>
     <div class="container body-content">
         <br />

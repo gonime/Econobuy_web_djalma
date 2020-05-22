@@ -137,6 +137,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CadastroCliente.cs" />
+    <Compile Include="Models\ConsultaPedidosCliente.cs" />
     <Compile Include="Models\ConsultaPedidosMercado.cs" />
     <Compile Include="Models\ConsultaProdutos.cs" />
     <Compile Include="Models\Model1.Context.cs">
@@ -373,6 +374,7 @@
     <Content Include="Views\Cliente\Cadastro.cshtml" />
     <Content Include="Views\Mercado\ConsultarPedidos.cshtml" />
     <Content Include="Views\Mercado\ConsultarProdutos.cshtml" />
+    <Content Include="Views\Cliente\ConsultarPedidos.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

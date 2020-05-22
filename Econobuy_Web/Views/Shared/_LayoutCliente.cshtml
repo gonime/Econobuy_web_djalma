@@ -14,16 +14,17 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <!--<div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto align-items-center">
-                <li class="nav-item active px-2">
+                <!--<li class="nav-item active px-2">
                     <a>@Html.ActionLink("Novo Pedido", "ActionResult", "Cliente", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
-                </li>
+                </li>-->
                 <li class="nav-item px-2">
-                    <a>@Html.ActionLink("Consultar Pedidos", "ActionResult", "Cliente", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
+                    <a>@Html.ActionLink("Consultar Pedidos", "ConsultarPedidos", "Cliente", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
                 </li>
             </ul>
-        </div>-->
+        </div>
+        <button class="btn btn-success ml-auto mr-1">@Html.ActionLink("Logout", "Logout", "Cliente", new { area = "" }, new { @style = "color: black; text-decoration:none; " })</button>
     </nav>
     <div class="container body-content">
         <br />

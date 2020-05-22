@@ -109,6 +109,10 @@ namespace Econobuy_Web.Controllers
             return View();
         }
 
-        
+        public ActionResult Logout()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index", "Mercado");
+        }
     }
 }

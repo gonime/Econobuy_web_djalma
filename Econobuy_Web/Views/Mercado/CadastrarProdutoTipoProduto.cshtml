@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Econobuy_Web.Models.CadastroProduto>
+
+@{
+    ViewBag.Title = "Cadastrar Produto";
+}
+
+
+<p><btn>@Html.ActionLink("Novo Departamento", "CadastrarNovoTipoProduto", "Mercado", new { area = "" }, new { @style = "color: white; text-decoration:none; ", @class = "btn btn-warning" })</btn></p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Cat03)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cat03)
+            </td>
+            <td>
+                @Html.ActionLink("Selecionar", "CadastrarProduto", new { id = item.Cat03ID, nome = item.Cat03 })
+            </td>
+        </tr>
+    }
+
+</table>

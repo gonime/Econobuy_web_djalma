@@ -1,6 +1,8 @@
 ﻿using Econobuy_Web.Models;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -39,6 +41,16 @@ namespace Econobuy_Web.Controllers
             return View();
         }
 
+        public ActionResult MostraLogo(int Id)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                byte[] logo = (from img in db.tb_mercado_img where img.mer_in_codigo == Id select img.mer_img).First();
+                if (logo != null) return File(logo, "image/jpg");
+                else return null;
+            }
+        }
+
         public ActionResult ConsultarPedidos()
         {
             int Id = Convert.ToInt32(Session["mercadoID"]);
@@ -66,7 +78,73 @@ namespace Econobuy_Web.Controllers
 
         public ActionResult AlterarUsuario()
         {
-            return View();
+            int Id = Convert.ToInt32(Session["mercadoID"]);
+            using (EconobuyEntities db = new EconobuyEntities()) 
+            {
+                var alter = (from mer in db.tb_mercado
+                           join end in db.tb_endereco on
+                           mer.end_in_codigo equals end.end_in_codigo
+                           join merImg
+                           in db.tb_mercado_img on mer.mer_in_codigo
+                           equals merImg.mer_in_codigo
+                           where mer.mer_in_codigo == Id
+                           select new AlteraMercado
+                           {
+                               User = mer.mer_st_user,
+                               Senha = mer.mer_st_senha,
+                               Email = mer.mer_st_email,
+                               Telefone_1 = end.end_st_tel1,
+                               Telefone_2 = end.end_st_tel2,
+                               EndID = end.end_in_codigo,
+                               MerID = mer.mer_in_codigo,
+                               ImgID = merImg.mer_img_in_codigo
+                           });
+                if (alter != null)
+                {
+                    AlteraMercado alt = alter.First();
+                    return View(alt);
+                }
+                else return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AlteraUsuario(AlteraMercado alt, HttpPostedFileBase imgMercado)
+        {
+            HttpPostedFileBase file = Request.Files["img"];
+            if(file.ContentLength > 0) alt.imgMercado = ConvertToBytes(file);
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View("AlterarUsuario", alt);
+                }
+                else
+                {
+                    tb_endereco end = db.tb_endereco.Find(alt.EndID);
+                    tb_mercado mer = db.tb_mercado.Find(alt.MerID);
+                    tb_mercado_img img = db.tb_mercado_img.Find(alt.ImgID);
+                    if (alt != null)
+                    {
+                        mer.mer_st_user = alt.User;
+                        mer.mer_st_senha = alt.Senha;
+                        mer.mer_st_email = alt.Email;
+                        end.end_st_tel1 = alt.Telefone_1;
+                        end.end_st_tel2 = alt.Telefone_2;
+                        if(alt.imgMercado != null) img.mer_img = alt.imgMercado;
+                    }
+                    db.SaveChanges();
+                    return RedirectToAction("Home", "Mercado");
+                }
+            }
+        }
+
+        public byte[] ConvertToBytes(HttpPostedFileBase image)
+        {
+            byte[] imageBytes = null;
+            BinaryReader reader = new BinaryReader(image.InputStream);
+            imageBytes = reader.ReadBytes((int)image.ContentLength);
+            return imageBytes;
         }
 
         public ActionResult ConsultarAvaliacoes()
@@ -104,9 +182,163 @@ namespace Econobuy_Web.Controllers
             }
         }
 
-        public ActionResult CadastrarProduto()
+        public ActionResult CadastrarProdutoDepartamento()
+        {
+            using(EconobuyEntities db = new EconobuyEntities())
+            {
+                var cat = (from cat01 in db.tb_categoria_n01
+                           select new CadastroProduto
+                           {
+                               Cat01ID = cat01.cat01_in_codigo,
+                               Cat01 = cat01.cat01_st_nome
+                           }).ToList();
+                return View(cat);
+            }
+        }
+
+        public ActionResult CadastrarNovoDepartamento()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult CadastraCat01(tb_categoria_n01 cat01) 
+        {
+            if (ModelState.IsValid)
+            {
+                using(EconobuyEntities db = new EconobuyEntities())
+                {
+                    var Cat = db.tb_categoria_n01.Add(cat01);
+                    db.SaveChanges();
+                    return RedirectToAction("CadastrarNovaCategoria", new { id = Cat.cat01_in_codigo, nome = Cat.cat01_st_nome });
+                }
+            }
+            else
+                return View(cat01);
+        }
+        public ActionResult CadastrarProdutoCategoria(int id, string nome)
+        {
+            TempData["Cat01ID"] = id;
+            TempData["Cat01"] = nome;
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var cat = (from cat02 in db.tb_categoria_n02 where
+                           cat02.cat01_in_codigo == id
+                           select new CadastroProduto
+                           {
+                               Cat02ID = cat02.cat02_in_codigo,
+                               Cat02 = cat02.cat02_st_nome
+                           }).ToList();
+                return View(cat);
+            }
+        }
+        public ActionResult CadastrarNovaCategoria(int id, string nome)
+        {
+            TempData["Cat01ID"] = id;
+            TempData["Cat01"] = nome;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CadastraCat02(tb_categoria_n02 cat02)
+        {
+            if (ModelState.IsValid)
+            {
+                using (EconobuyEntities db = new EconobuyEntities())
+                {
+                    cat02.cat01_in_codigo = Convert.ToInt32(TempData["Cat01ID"]);
+                    var Cat = db.tb_categoria_n02.Add(cat02);
+                    db.SaveChanges();
+                    return RedirectToAction("CadastrarNovoTipoProduto", new { id = Cat.cat02_in_codigo, nome = Cat.cat02_st_nome });
+                }
+            }
+            else
+                return View(cat02);
+        }
+        public ActionResult CadastrarProdutoTipoProduto(int id, string nome)
+        {
+            TempData["Cat02ID"] = id;
+            TempData["Cat02"] = nome;
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var cat = (from cat03 in db.tb_categoria_n03
+                           where
+                           cat03.cat02_in_codigo == id
+                           select new CadastroProduto
+                           {
+                               Cat03ID = cat03.cat02_in_codigo,
+                               Cat03 = cat03.cat03_st_nome
+                           }).ToList();
+                return View(cat);
+            }
+        }
+        public ActionResult CadastrarNovoTipoProduto(int id, string nome)
+        {
+            TempData["Cat03ID"] = id;
+            TempData["Cat03"] = nome;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CadastraCat03(tb_categoria_n03 cat03)
+        {
+            if (ModelState.IsValid)
+            {
+                using (EconobuyEntities db = new EconobuyEntities())
+                {
+                    cat03.cat02_in_codigo = Convert.ToInt32(TempData["Cat02ID"]);
+                    var Cat = db.tb_categoria_n03.Add(cat03);
+                    db.SaveChanges();
+                    return RedirectToAction("CadastrarProduto", new { id = Cat.cat03_in_codigo, nome = Cat.cat03_st_nome });
+                }
+            }
+            else
+                return View(cat03);
+        }
+        public ActionResult CadastrarProduto(int id, string nome)
+        {
+            TempData["Cat03ID"] = id;
+            TempData["Cat03"] = nome;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CadastraProduto(CadastroProduto prod, HttpPostedFileBase imgProduto)
+        {
+            HttpPostedFileBase file = Request.Files["img"];
+            if (file.ContentLength > 0) prod.Imagem = ConvertToBytes(file);
+            var pro = new tb_produto
+            {
+                prod_bit_active = true,
+                prod_bit_trad_active = prod.Tradicional,
+                prod_dec_valor_un = prod.Valor,
+                prod_st_cod_mer = prod.Codigo_Mercado,
+                prod_st_descricao = prod.Descricao,
+                prod_st_nome = prod.Nome,
+                cat01_in_codigo = Convert.ToInt32(TempData["Cat01ID"]),
+                cat02_in_codigo = Convert.ToInt32(TempData["Cat02ID"]),
+                cat03_in_codigo = Convert.ToInt32(TempData["Cat03ID"]),
+                mer_in_codigo = Convert.ToInt32(Session["mercadoID"])
+            };
+            var img = new tb_produto_img
+            {
+                prod_img = prod.Imagem
+            };
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View("CadastrarProduto", prod);
+                }
+                else
+                {
+                    db.tb_produto.Add(pro);
+                    if (file.ContentLength > 0) { 
+                        img.prod_in_codigo = pro.prod_in_codigo;
+                        db.tb_produto_img.Add(img); 
+                    }
+                    db.SaveChanges();
+                    return RedirectToAction("Home", "Mercado");
+                }
+            }
         }
 
         public ActionResult Logout()

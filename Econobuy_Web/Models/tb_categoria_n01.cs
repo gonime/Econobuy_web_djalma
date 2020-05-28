@@ -11,7 +11,8 @@ namespace Econobuy_Web.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class tb_categoria_n01
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,6 +23,8 @@ namespace Econobuy_Web.Models
         }
     
         public int cat01_in_codigo { get; set; }
+        [Display(Name = "Departamento")]
+        [Required(ErrorMessage = "Este Campo é obrigatório")]
         public string cat01_st_nome { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

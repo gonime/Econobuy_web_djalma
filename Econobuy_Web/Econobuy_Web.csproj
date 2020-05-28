@@ -136,7 +136,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AlteraMercado.cs" />
     <Compile Include="Models\CadastroCliente.cs" />
+    <Compile Include="Models\CadastroProduto.cs" />
     <Compile Include="Models\ConsultaPedidosCliente.cs" />
     <Compile Include="Models\ConsultaPedidosMercado.cs" />
     <Compile Include="Models\ConsultaProdutos.cs" />
@@ -262,6 +264,11 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
+    <Content Include="Scripts\inputmask\bindings\inputmask.binding.js" />
+    <Content Include="Scripts\inputmask\inputmask.js" />
+    <Content Include="Scripts\inputmask\inputmask.min.js" />
+    <Content Include="Scripts\inputmask\jquery.inputmask.js" />
+    <Content Include="Scripts\inputmask\jquery.inputmask.min.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
     <Content Include="Scripts\jquery-3.5.1.slim.js" />
@@ -375,6 +382,14 @@
     <Content Include="Views\Mercado\ConsultarPedidos.cshtml" />
     <Content Include="Views\Mercado\ConsultarProdutos.cshtml" />
     <Content Include="Views\Cliente\ConsultarPedidos.cshtml" />
+    <Content Include="Views\Mercado\AlterarUsuario.cshtml" />
+    <Content Include="Views\Mercado\CadastrarProdutoDepartamento.cshtml" />
+    <Content Include="Views\Mercado\CadastrarProdutoCategoria.cshtml" />
+    <Content Include="Views\Mercado\CadastrarProdutoTipoProduto.cshtml" />
+    <Content Include="Views\Mercado\CadastrarProduto.cshtml" />
+    <Content Include="Views\Mercado\CadastrarNovoDepartamento.cshtml" />
+    <Content Include="Views\Mercado\CadastrarNovaCategoria.cshtml" />
+    <Content Include="Views\Mercado\CadastrarNovoTipoProduto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

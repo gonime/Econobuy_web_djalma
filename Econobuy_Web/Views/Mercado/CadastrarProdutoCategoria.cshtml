@@ -1,6 +1,11 @@
 ﻿@model IEnumerable<Econobuy_Web.Models.CadastroProduto>
 
 @{
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
+    if (Session["mercadoID"] == null)
+    {
+        Response.Redirect("~/Mercado/Index");
+    }
     ViewBag.Title = "Cadastrar Produto";
 }
 
@@ -21,7 +26,7 @@
                 @Html.DisplayFor(modelItem => item.Cat02)
             </td>
             <td>
-                @Html.ActionLink("Selecionar", "CadastrarProdutoCat03", new { id = item.Cat02ID, nome = item.Cat02 })
+                @Html.ActionLink("Selecionar", "CadastrarProdutoTipoProduto", new { id = item.Cat02ID, nome = item.Cat02 })
             </td>
         </tr>
     }

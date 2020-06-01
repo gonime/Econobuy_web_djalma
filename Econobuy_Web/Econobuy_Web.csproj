@@ -390,6 +390,7 @@
     <Content Include="Views\Mercado\CadastrarNovoDepartamento.cshtml" />
     <Content Include="Views\Mercado\CadastrarNovaCategoria.cshtml" />
     <Content Include="Views\Mercado\CadastrarNovoTipoProduto.cshtml" />
+    <Content Include="Views\Mercado\EditarProduto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

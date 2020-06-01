@@ -1,6 +1,11 @@
 ﻿@model IEnumerable<Econobuy_Web.Models.CadastroProduto>
 
 @{
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
+    if (Session["mercadoID"] == null)
+    {
+        Response.Redirect("~/Mercado/Index");
+    }
     ViewBag.Title = "Cadastrar Produto";
 }
 

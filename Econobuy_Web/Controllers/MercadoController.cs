@@ -45,8 +45,12 @@ namespace Econobuy_Web.Controllers
         {
             using (EconobuyEntities db = new EconobuyEntities())
             {
-                byte[] logo = (from img in db.tb_mercado_img where img.mer_in_codigo == Id select img.mer_img).First();
-                if (logo != null) return File(logo, "image/jpg");
+                var result = (from img in db.tb_mercado_img where img.mer_in_codigo == Id select img.mer_img).First();
+                if (result.Any())
+                {
+                    byte[] logo = result;
+                    return File(logo, "image/jpg");
+                }
                 else return null;
             }
         }
@@ -134,7 +138,7 @@ namespace Econobuy_Web.Controllers
                         if(alt.imgMercado != null) img.mer_img = alt.imgMercado;
                     }
                     db.SaveChanges();
-                    return RedirectToAction("Home", "Mercado");
+                    return RedirectToAction("ConsultarProdutos", "Mercado");
                 }
             }
         }
@@ -273,8 +277,8 @@ namespace Econobuy_Web.Controllers
         }
         public ActionResult CadastrarNovoTipoProduto(int id, string nome)
         {
-            TempData["Cat03ID"] = id;
-            TempData["Cat03"] = nome;
+            TempData["Cat02ID"] = id;
+            TempData["Cat02"] = nome;
             return View();
         }
         [HttpPost]
@@ -336,11 +340,80 @@ namespace Econobuy_Web.Controllers
                         db.tb_produto_img.Add(img); 
                     }
                     db.SaveChanges();
-                    return RedirectToAction("Home", "Mercado");
+                    return RedirectToAction("ConsultarProdutos", "Mercado");
                 }
             }
         }
 
+        public ActionResult EditarProduto(int id)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var model = (from prod in db.tb_produto
+                             join cat01 in db.tb_categoria_n01 on prod.cat01_in_codigo
+                             equals cat01.cat01_in_codigo
+                             join cat02 in db.tb_categoria_n02 on prod.cat02_in_codigo
+                             equals cat02.cat02_in_codigo
+                             join cat03 in db.tb_categoria_n03 on prod.cat03_in_codigo
+                             equals cat03.cat03_in_codigo
+                             where prod.prod_in_codigo == id
+                             select new CadastroProduto
+                             {
+                                 Nome = prod.prod_st_nome,
+                                 Descricao = prod.prod_st_descricao,
+                                 Valor = prod.prod_dec_valor_un,
+                                 Codigo_Mercado = prod.prod_st_cod_mer,
+                                 Tradicional = prod.prod_bit_trad_active,
+                                 Cat01 = cat01.cat01_st_nome,
+                                 Cat02 = cat02.cat02_st_nome,
+                                 Cat03 = cat03.cat03_st_nome,
+                                 ProdID = prod.prod_in_codigo
+                             }
+                             ).First();
+                return View(model);
+            }
+        }
+
+        public ActionResult MostraImgProduto(int Id)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var result = (from img in db.tb_produto_img where img.prod_in_codigo == Id select img.prod_img).First();
+                if (result.Any())
+                {
+                    byte[] logo = result;
+                    return File(logo, "image/jpg");
+                }
+                else return null;
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditaProduto(CadastroProduto cad, HttpPostedFileBase imgMercado)
+        {
+            HttpPostedFileBase file = Request.Files["img"];
+            if (file.ContentLength > 0) cad.Imagem = ConvertToBytes(file);
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                if (ModelState.IsValid)
+                {
+                    tb_produto prod = db.tb_produto.Find(cad.ProdID);
+                    tb_produto_img img = db.tb_produto_img.Find(cad.ProdID);
+                    if (prod != null)
+                    {
+                        prod.prod_st_nome = cad.Nome;
+                        prod.prod_st_descricao = cad.Descricao;
+                        prod.prod_dec_valor_un = cad.Valor;
+                        prod.prod_st_cod_mer = cad.Codigo_Mercado;
+                        prod.prod_bit_trad_active = cad.Tradicional;
+                        if (cad.Imagem != null) img.prod_img = cad.Imagem;
+                        db.SaveChanges();
+                    }
+                    return RedirectToAction("ConsultarProdutos", "Mercado");
+                }
+                else return View(cad);
+            }
+        }
         public ActionResult Logout()
         {
             Session.Abandon();

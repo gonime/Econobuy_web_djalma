@@ -1,6 +1,11 @@
 ﻿@model Econobuy_Web.Models.tb_categoria_n01
 
 @{
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
+    if (Session["mercadoID"] == null)
+    {
+        Response.Redirect("~/Mercado/Index");
+    }
     ViewBag.Title = "Novo Departamento";
 }
 

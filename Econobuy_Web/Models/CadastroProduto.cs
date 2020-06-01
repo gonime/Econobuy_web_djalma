@@ -9,12 +9,16 @@ namespace Econobuy_Web.Models
     public class CadastroProduto
     {
         [Display(Name = "Nome do Produto")]
+        [Required(ErrorMessage = "Este campo é obrigatório")]
         public string Nome { get; set; }
         [Display(Name = "Descrição")]
+        [Required(ErrorMessage = "Este campo é obrigatório")]
         public string Descricao { get; set; }
         [Display(Name = "Código do Produto")]
+        [Required(ErrorMessage = "Este campo é obrigatório")]
         public string Codigo_Mercado { get; set; }
         [Display(Name = "Valor")]
+        [Required(ErrorMessage = "Este campo é obrigatório")]
         public decimal Valor { get; set; }
         [Display(Name = "Modo Tradicional")]
         public bool Tradicional { get; set; }
@@ -27,6 +31,7 @@ namespace Econobuy_Web.Models
         public int Cat01ID { get; set; }
         public int Cat02ID { get; set; }
         public int Cat03ID { get; set; }
+        public int ProdID { get; set; }
         public byte[] Imagem { get; set; }
     }
 }

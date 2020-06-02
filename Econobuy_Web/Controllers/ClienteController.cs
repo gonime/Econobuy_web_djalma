@@ -62,7 +62,10 @@ namespace Econobuy_Web.Controllers
                 cli_st_email = cad.email,
                 cli_st_nome = cad.Nome,
                 cli_st_senha = cad.Senha,
-                cli_st_user = cad.User
+                cli_st_user = cad.User,
+                cli_bit_active = true,
+                cli_bit_advert = false,
+                cli_bit_conf_email = false
             };
             using (EconobuyEntities db = new EconobuyEntities())
             {

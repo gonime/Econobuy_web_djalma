@@ -10,12 +10,15 @@ namespace Econobuy_Web.Models
     {
         [Display(Name = "Nome do Produto")]
         [Required(ErrorMessage = "Este campo é obrigatório")]
+        [MaxLength(255)]
         public string Nome { get; set; }
         [Display(Name = "Descrição")]
         [Required(ErrorMessage = "Este campo é obrigatório")]
+        [MaxLength(1000)]
         public string Descricao { get; set; }
         [Display(Name = "Código do Produto")]
         [Required(ErrorMessage = "Este campo é obrigatório")]
+        [MaxLength(20)]
         public string Codigo_Mercado { get; set; }
         [Display(Name = "Valor")]
         [Required(ErrorMessage = "Este campo é obrigatório")]
@@ -23,10 +26,13 @@ namespace Econobuy_Web.Models
         [Display(Name = "Modo Tradicional")]
         public bool Tradicional { get; set; }
         [Display(Name = "Departamento")]
+        [MaxLength(255)]
         public string Cat01 { get; set; }
         [Display(Name = "Categoria")]
+        [MaxLength(255)]
         public string Cat02 { get; set; }
         [Display(Name = "Produto")]
+        [MaxLength(255)]
         public string Cat03 { get; set; }
         public int Cat01ID { get; set; }
         public int Cat02ID { get; set; }

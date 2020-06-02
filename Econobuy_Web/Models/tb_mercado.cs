@@ -11,7 +11,8 @@ namespace Econobuy_Web.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class tb_mercado
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -25,7 +26,10 @@ namespace Econobuy_Web.Models
     
         public int mer_in_codigo { get; set; }
         public string mer_st_nome { get; set; }
+        [Display(Name = "Usuário")]
         public string mer_st_user { get; set; }
+        [Display(Name = "Senha")]
+        [DataType(DataType.Password)]
         public string mer_st_senha { get; set; }
         public string mer_st_CPNJ { get; set; }
         public string mer_st_email { get; set; }

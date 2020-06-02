@@ -28,6 +28,7 @@ namespace Econobuy_Web.Models
         [Display(Name = "Usuário")]
         public string cli_st_user { get; set; }
         [Display(Name = "Senha")]
+        [DataType(DataType.Password)]
         public string cli_st_senha { get; set; }
         public string cli_st_CPF { get; set; }
         public string cli_st_email { get; set; }

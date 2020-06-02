@@ -115,6 +115,37 @@ namespace Econobuy_Web.Controllers
             }
         }
 
+        public ActionResult VisualizarPedido(int id)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var model = (from en in db.tb_endereco join mer
+                             in db.tb_mercado on en.end_in_codigo 
+                             equals mer.end_in_codigo join ped
+                             in db.tb_pedido on mer.mer_in_codigo 
+                             equals ped.mer_in_codigo where 
+                             ped.ped_in_codigo == id
+                             select new VisualizarPedido
+                             {
+                                 Mercado_Ou_Cliente = mer.mer_st_nome,
+                                 Data = ped.data_dt_pedido,
+                                 CEP = en.end_st_CEP,
+                                 Cidade = en.end_st_cidade,
+                                 Bairro = en.end_st_bairro,
+                                 Logradouro = en.end_st_log,
+                                 Numero = en.end_st_num,
+                                 Email = mer.mer_st_email,
+                                 Telefone_1 = en.end_st_tel1,
+                                 Telefone_2 = en.end_st_tel2,
+                                 Status = ped.ped_status,
+                                 Valor = ped.ped_dec_valor,
+                                 PedID = ped.ped_in_codigo
+                             }
+                             ).First();
+                return View(model);
+            }
+        }
+
         public ActionResult Logout()
         {
             Session.Abandon();

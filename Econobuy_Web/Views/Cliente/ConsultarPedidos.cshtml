@@ -9,7 +9,7 @@
     ViewBag.Title = "Pedidos";
 }
 
-<h2>ConsultarPedidos</h2>
+<h2>Pedidos</h2>
 
 <table class="table">
     <tr>
@@ -61,7 +61,7 @@
             @Html.DisplayFor(modelItem => item.Logradouro)
         </td>
         <td>
-            @Html.ActionLink("Visualizar", "VisualizaPedidoCliente", new { id=item.Id }) 
+            @Html.ActionLink("Visualizar", "VisualizarPedido", new { id=item.Id }) 
         </td>
     </tr>
 }

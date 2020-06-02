@@ -24,21 +24,12 @@ namespace Econobuy_Web.Models
         }
     
         public int cli_in_codigo { get; set; }
-        [Display(Name = "Nome")]
-        [Required(ErrorMessage = "Este campo é obrigatório")]
         public string cli_st_nome { get; set; }
         [Display(Name = "Usuário")]
-        [Required(ErrorMessage = "Este campo é obrigatório")]
         public string cli_st_user { get; set; }
         [Display(Name = "Senha")]
-        [Required(ErrorMessage = "Este campo é obrigatório")]
-        [DataType(DataType.Password)]
         public string cli_st_senha { get; set; }
-        [Display(Name = "CPF")]
-        [Required(ErrorMessage = "Este campo é obrigatório")]
         public string cli_st_CPF { get; set; }
-        [Display(Name = "E-mail")]
-        [Required(ErrorMessage = "Este campo é obrigatório")]
         public string cli_st_email { get; set; }
         public int end_in_codigo { get; set; }
         public bool cli_bit_active { get; set; }

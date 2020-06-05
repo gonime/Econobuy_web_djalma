@@ -38,7 +38,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @id = "email" } })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -46,7 +46,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Telefone_1, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Telefone_1, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Telefone_1, new { htmlAttributes = new { @class = "form-control", @id = "telefone" } })
                 @Html.ValidationMessageFor(model => model.Telefone_1, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -54,21 +54,21 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Telefone_2, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Telefone_2, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Telefone_2, new { htmlAttributes = new { @class = "form-control", @id = "telefone2" } })
                 @Html.ValidationMessageFor(model => model.Telefone_2, "", new { @class = "text-danger" })
             </div>
         </div>
 
-                @Html.HiddenFor(model => model.MerID, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.MerID, new { htmlAttributes = new { @class = "form-control" } })
 
-                @Html.HiddenFor(model => model.EndID, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.EndID, new { htmlAttributes = new { @class = "form-control" } })
 
-                @Html.HiddenFor(model => model.ImgID, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.ImgID, new { htmlAttributes = new { @class = "form-control" } })
 
         <div class="form-group">
             @Html.LabelFor(model => model.imgMercado, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" name="img" id="img" accept="image/x-png,image/jpeg" onchange="fileCheck(this);"  />
+                <input type="file" name="img" id="img" accept="image/x-png,image/jpeg" onchange="fileCheck(this);" />
                 @Html.ValidationMessageFor(model => model.imgMercado)
             </div>
         </div>
@@ -81,3 +81,15 @@
     </div>
 }
 
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/inputmask")
+    <script>
+        $(document).ready(function () {
+            $("#telefone").inputmask("mask", { "mask": "(99) 9999-99999" });
+            $("#telefone2").inputmask("mask", { "mask": "(99) 9999-99999" });
+            $("#email").inputmask("email");
+        });
+    </script>
+}

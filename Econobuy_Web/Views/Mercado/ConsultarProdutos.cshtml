@@ -67,7 +67,10 @@
             @Html.DisplayFor(modelItem => item.Categoria_03)
         </td>
         <td>
-            @Html.ActionLink("Visualizar", "EditarProduto", new { id=item.Id })
+            @Html.ActionLink("Visualizar", "EditarProduto", new { id = item.Id }) |
+            @Html.ActionLink("Ativar/Desativar", "AtivaProduto", new { confirm = true, id = item.Id }) |
+            @Html.ActionLink("Ativar/Desativar Tradicional", "AtivaTradProduto", new { confirm = true, id = item.Id }) |
+            @Html.ActionLink("Deletar", "DeletaProduto", new { confirm = true, id = item.Id }, new { onclick = "return confirm('Confirme a exclusão')" })
         </td>
     </tr>
 }

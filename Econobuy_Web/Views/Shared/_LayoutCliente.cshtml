@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html style="height: 100%;">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
@@ -8,17 +8,20 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
+<body style="
+    height: 100%;
+    background-color: rgb(214, 253, 255)">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <h3 class="px-2">@Html.ActionLink("Econobuy", "Index", "Home", new { area = "" }, new { @style = "color: rgb(217, 217, 2); text-decoration:none; " })</h3>
+        <img src="~/Repository/Images/Logo.png" width="30" height="30" />
+        <h3 class="px-2">@Html.ActionLink("Econobuy", "Home", "Home", new { area = "" }, new { @style = "color: rgb(217, 217, 2); text-decoration:none; " })</h3>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto align-items-center">
                 <!--<li class="nav-item active px-2">
-                    <a>@Html.ActionLink("Novo Pedido", "ActionResult", "Cliente", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
-                </li>-->
+                <a>@Html.ActionLink("Novo Pedido", "ActionResult", "Cliente", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
+            </li>-->
                 <li class="nav-item px-2">
                     <a>@Html.ActionLink("Consultar Pedidos", "ConsultarPedidos", "Cliente", new { area = "" }, new { @style = "color: white; text-decoration:none; " })</a>
                 </li>
@@ -29,7 +32,7 @@
     <div class="container body-content">
         <br />
         <br />
-        @RenderBody()
+            @RenderBody()
         <br />
         <br />
         <footer class="fixed-bottom">

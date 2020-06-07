@@ -10,14 +10,14 @@
 }
 
 
-@using (Html.BeginForm("CadastraCat01", "Mercado")) 
+@using (Html.BeginForm("CadastraCat01", "Mercado"))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.cat01_st_nome, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">

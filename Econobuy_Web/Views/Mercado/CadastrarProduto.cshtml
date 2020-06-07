@@ -83,7 +83,16 @@
     @Scripts.Render("~/bundles/inputmask")
     <script>
         $(document).ready(function () {
-            $("#valor").inputmask('##9.99', { reverse: true });
+            $("#valor").inputmask('decimal', {
+                'alias': 'numeric',
+                'groupSeparator': ',',
+                'autoGroup': true,
+                'digits': 2,
+                'radixPoint': ".",
+                'digitsOptional': false,
+                'allowMinus': false,
+                'placeholder': ''
+            });
         });
     </script>
 }

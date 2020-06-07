@@ -575,6 +575,7 @@
     <Content Include="Views\Mercado\EditarProduto.cshtml" />
     <Content Include="Views\Cliente\VisualizarPedido.cshtml" />
     <Content Include="Views\Cliente\RecuperarSenha.cshtml" />
+    <Content Include="Views\Mercado\RecuperarSenha.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

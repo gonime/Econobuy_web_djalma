@@ -10,9 +10,9 @@
 }
 
 
-<p><btn>@Html.ActionLink("Novo Departamento", "CadastrarNovoTipoProduto", "Mercado", new { area = "" }, new { @style = "color: white; text-decoration:none; ", @class = "btn btn-warning" })</btn></p>
-<table class="table">
-    <tr>
+<p><btn>@Html.ActionLink("Novo Tipo de Produto", "CadastrarNovoTipoProduto", "Mercado", new { area = "" }, new { @style = "color: white; text-decoration:none; ", @class = "btn btn-warning" })</btn></p>
+<table class="table table-hover table-bordered bg-light">
+    <tr class="bg-dark text-light">
         <th>
             @Html.DisplayNameFor(model => model.Cat03)
         </th>

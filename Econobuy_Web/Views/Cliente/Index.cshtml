@@ -32,6 +32,7 @@
                                             <h5>Senha</h5>
                                             @Html.EditorFor(model => model.cli_st_senha, new { htmlAttributes = new { @class = "form-control col-md-10" } })
                                             @Html.ValidationMessageFor(model => model.cli_st_senha, "", new { @class = "text-danger" })
+                                            <a>@Html.ActionLink("Esqueci minha senha", "RecuperarSenha", "Cliente", new { area = "" })</a>
                                             <div style="color: red">
                                                 @{
                                                     if (IsPost)
@@ -50,7 +51,7 @@
                                     <div class="col-lg-2">
                                     </div>
 
-                                    <div class="col-lg-4" >
+                                    <div class="col-lg-4">
 
                                         <h4>Ou........</h4>
                                         <br />
@@ -60,9 +61,8 @@
                                             <a>@Html.ActionLink("Cadastre-se", "Cadastro", "Cliente", new { area = "" }, new { @style = "color: white; text-decoration:none; ", @class = "btn btn-primary" })</a>
                                         </div>
                                     </div>
+
                                 </div>
-                            </div>
-                            <div class="row">
                             </div>
                         </form>
                     </div>

@@ -1,4 +1,4 @@
-﻿@model Econobuy_Web.Models.tb_cliente
+﻿@model Econobuy_Web.Models.tb_mercado
 
 @{
     ViewBag.Title = "Recuperar Senha";
@@ -6,7 +6,7 @@
 
 <h2>Recuperar Senha</h2>
 
-@using (Html.BeginForm("RecuperaSenha", "Cliente"))
+@using (Html.BeginForm("RecuperaSenha", "Mercado"))
 {
     @Html.AntiForgeryToken()
 
@@ -19,7 +19,7 @@
         <div class="form-group">
             <div class="col-md-10">
                 <h5>Insira seu e-mail cadastrado no sistema</h5>
-                @Html.EditorFor(model => model.cli_st_email, new { htmlAttributes = new { @class = "form-control", @id = "email" } })
+                @Html.EditorFor(model => model.mer_st_email, new { htmlAttributes = new { @class = "form-control", @id = "email" } })
                 <div style="color: red">
                     @{
                         if (IsPost)
@@ -53,8 +53,8 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/inputmask")
     <script>
-        $(document).ready(function () {
-            $("#email").inputmask("email");
-        });
+            $(document).ready(function () {
+                $("#email").inputmask("email");
+            });
     </script>
 }

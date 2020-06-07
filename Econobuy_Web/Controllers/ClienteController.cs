@@ -50,11 +50,6 @@ namespace Econobuy_Web.Controllers
                 int cliID = db.tb_cliente.Where(x => x.cli_st_email == cli.cli_st_email).Select(x => x.cli_in_codigo).SingleOrDefault();
                 if (cliID > 0)
                 {
-                    TempData["Query"] = "E-mail não encontrado no sistema";
-                    return View("Index", cli);
-                }
-                else
-                {
                     Random rnd = new Random();
                     const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                     string senha = new string(Enumerable.Repeat(chars, 10)
@@ -62,14 +57,19 @@ namespace Econobuy_Web.Controllers
                     tb_cliente cl = db.tb_cliente.Find(cliID);
                     cl.cli_st_senha = senha;
                     db.SaveChanges();
-                    EnviaMensagemEmail(cli.cli_st_email, cli.cli_st_user, senha);
+                    EnviaSenhaEmail(cli.cli_st_email, cli.cli_st_user, senha);
                     TempData["Query"] = "Seus dados de acesso foram enviados para seu e-mail";
-                    return View();
+                    return View("RecuperarSenha", cli);
+                }
+                else
+                {
+                    TempData["Erro"] = "E-mail não encontrado no sistema";
+                    return View("RecuperarSenha", cli);
                 }
             }
         }
 
-        public void EnviaMensagemEmail(string email, string usuario, string senha)
+        public void EnviaSenhaEmail(string email, string usuario, string senha)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace Econobuy_Web.Controllers
                     db.SaveChanges();
                     Session["clienteID"] = cli.cli_in_codigo;
                     Session["clienteNome"] = cli.cli_st_nome;
-                    return RedirectToAction("Home","Cliente");
+                    return RedirectToAction("Home", "Cliente");
                 }
             }
         }
@@ -276,10 +276,10 @@ namespace Econobuy_Web.Controllers
             using (EconobuyEntities db = new EconobuyEntities())
             {
                 var model = (from en in db.tb_endereco join mer
-                             in db.tb_mercado on en.end_in_codigo 
+                             in db.tb_mercado on en.end_in_codigo
                              equals mer.end_in_codigo join ped
-                             in db.tb_pedido on mer.mer_in_codigo 
-                             equals ped.mer_in_codigo where 
+                             in db.tb_pedido on mer.mer_in_codigo
+                             equals ped.mer_in_codigo where
                              ped.ped_in_codigo == id
                              select new VisualizarPedido
                              {

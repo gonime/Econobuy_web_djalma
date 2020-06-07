@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -36,6 +38,59 @@ namespace Econobuy_Web.Controllers
                 }
             }
         }
+
+
+        public ActionResult RecuperarSenha(tb_mercado mer)
+        {
+            return View();
+        }
+
+        public ActionResult RecuperaSenha(tb_mercado mer)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                int merID = db.tb_mercado.Where(x => x.mer_st_email == mer.mer_st_email).Select(x => x.mer_in_codigo).SingleOrDefault();
+                if (merID > 0)
+                {
+                    Random rnd = new Random();
+                    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                    string senha = new string(Enumerable.Repeat(chars, 10)
+                      .Select(s => s[rnd.Next(s.Length)]).ToArray());
+                    tb_mercado me = db.tb_mercado.Find(merID);
+                    me.mer_st_senha = senha;
+                    db.SaveChanges();
+                    EnviaSenhaEmail(mer.mer_st_email, mer.mer_st_user, senha);
+                    TempData["Query"] = "Seus dados de acesso foram enviados para seu e-mail";
+                    return View("RecuperarSenha", mer);
+                }
+                else
+                {
+                    TempData["Erro"] = "E-mail não encontrado no sistema";
+                    return View("RecuperarSenha", mer);
+                }
+            }
+        }
+        public void EnviaSenhaEmail(string email, string usuario, string senha)
+        {
+            try
+            {
+                string msg = "Seguem os dados de acesso solicitados: \n\n Usuario: " + usuario + " \n Senha: " + senha +
+                    " \n\n Caso não tenha feito esta solicitação entre em contato conosco respondendo este e-mail. \n\n Atenciosamente, \n Equipe Econobuy.";
+                MailMessage mensagemEmail = new MailMessage("sistemaeconobuy@gmail.com", email, "Recuperação de Senha - Econobuy", msg);
+                SmtpClient client = new SmtpClient("smtp.gmail.com");
+                client.Port = 587;
+                client.EnableSsl = true;
+                client.UseDefaultCredentials = false;
+                client.Credentials = new NetworkCredential("sistemaeconobuy@gmail.com", "Nmb159nmb!");
+                client.Send(mensagemEmail);
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return;
+        }
+
         public ActionResult Home()
         {
             return View();
@@ -60,10 +115,12 @@ namespace Econobuy_Web.Controllers
             int Id = Convert.ToInt32(Session["mercadoID"]);
             using (EconobuyEntities db = new EconobuyEntities())
             {
-                var model = (from ped in db.tb_pedido join cli in db.tb_cliente on
-                             ped.cli_in_codigo equals cli.cli_in_codigo
+                var model = (from ped in db.tb_pedido
+                             join cli in db.tb_cliente on
+    ped.cli_in_codigo equals cli.cli_in_codigo
                              join en in db.tb_endereco on ped.end_in_codigo
-                             equals en.end_in_codigo where ped.mer_in_codigo == Id
+                             equals en.end_in_codigo
+                             where ped.mer_in_codigo == Id
                              select new ConsultaPedidosMercado
                              {
                                  Id = ped.ped_in_codigo,
@@ -110,26 +167,26 @@ namespace Econobuy_Web.Controllers
         public ActionResult AlterarUsuario()
         {
             int Id = Convert.ToInt32(Session["mercadoID"]);
-            using (EconobuyEntities db = new EconobuyEntities()) 
+            using (EconobuyEntities db = new EconobuyEntities())
             {
                 var alter = (from mer in db.tb_mercado
-                           join end in db.tb_endereco on
-                           mer.end_in_codigo equals end.end_in_codigo
-                           join merImg
-                           in db.tb_mercado_img on mer.mer_in_codigo
-                           equals merImg.mer_in_codigo
-                           where mer.mer_in_codigo == Id
-                           select new AlteraMercado
-                           {
-                               User = mer.mer_st_user,
-                               Senha = mer.mer_st_senha,
-                               Email = mer.mer_st_email,
-                               Telefone_1 = end.end_st_tel1,
-                               Telefone_2 = end.end_st_tel2,
-                               EndID = end.end_in_codigo,
-                               MerID = mer.mer_in_codigo,
-                               ImgID = merImg.mer_img_in_codigo
-                           });
+                             join end in db.tb_endereco on
+                             mer.end_in_codigo equals end.end_in_codigo
+                             join merImg
+                             in db.tb_mercado_img on mer.mer_in_codigo
+                             equals merImg.mer_in_codigo
+                             where mer.mer_in_codigo == Id
+                             select new AlteraMercado
+                             {
+                                 User = mer.mer_st_user,
+                                 Senha = mer.mer_st_senha,
+                                 Email = mer.mer_st_email,
+                                 Telefone_1 = end.end_st_tel1,
+                                 Telefone_2 = end.end_st_tel2,
+                                 EndID = end.end_in_codigo,
+                                 MerID = mer.mer_in_codigo,
+                                 ImgID = merImg.mer_img_in_codigo
+                             });
                 if (alter != null)
                 {
                     AlteraMercado alt = alter.First();
@@ -143,7 +200,7 @@ namespace Econobuy_Web.Controllers
         public ActionResult AlteraUsuario(AlteraMercado alt, HttpPostedFileBase imgMercado)
         {
             HttpPostedFileBase file = Request.Files["img"];
-            if(file.ContentLength > 0) alt.imgMercado = ConvertToBytes(file);
+            if (file.ContentLength > 0) alt.imgMercado = ConvertToBytes(file);
             using (EconobuyEntities db = new EconobuyEntities())
             {
                 if (!ModelState.IsValid)
@@ -162,7 +219,7 @@ namespace Econobuy_Web.Controllers
                         mer.mer_st_email = alt.Email;
                         end.end_st_tel1 = alt.Telefone_1;
                         end.end_st_tel2 = alt.Telefone_2;
-                        if(alt.imgMercado != null) img.mer_img = alt.imgMercado;
+                        if (alt.imgMercado != null) img.mer_img = alt.imgMercado;
                     }
                     db.SaveChanges();
                     return RedirectToAction("ConsultarProdutos", "Mercado");
@@ -188,14 +245,18 @@ namespace Econobuy_Web.Controllers
             int Id = Convert.ToInt32(Session["mercadoID"]);
             using (EconobuyEntities db = new EconobuyEntities())
             {
-                var model = (from prod in db.tb_produto join cat01 
-                             in db.tb_categoria_n01 on prod.cat01_in_codigo
-                             equals cat01.cat01_in_codigo join cat02 in
-                             db.tb_categoria_n02 on prod.cat02_in_codigo
-                             equals cat02.cat02_in_codigo join cat03 in 
-                             db.tb_categoria_n03 on prod.cat03_in_codigo
-                             equals cat03.cat03_in_codigo where
-                             prod.mer_in_codigo == Id
+                var model = (from prod in db.tb_produto
+                             join cat01
+  in db.tb_categoria_n01 on prod.cat01_in_codigo
+  equals cat01.cat01_in_codigo
+                             join cat02 in
+db.tb_categoria_n02 on prod.cat02_in_codigo
+equals cat02.cat02_in_codigo
+                             join cat03 in
+db.tb_categoria_n03 on prod.cat03_in_codigo
+equals cat03.cat03_in_codigo
+                             where
+prod.mer_in_codigo == Id
                              select new ConsultaProdutos
                              {
                                  Id = prod.prod_in_codigo,
@@ -215,7 +276,7 @@ namespace Econobuy_Web.Controllers
 
         public ActionResult CadastrarProdutoDepartamento()
         {
-            using(EconobuyEntities db = new EconobuyEntities())
+            using (EconobuyEntities db = new EconobuyEntities())
             {
                 var cat = (from cat01 in db.tb_categoria_n01
                            select new CadastroProduto
@@ -233,11 +294,11 @@ namespace Econobuy_Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult CadastraCat01(tb_categoria_n01 cat01) 
+        public ActionResult CadastraCat01(tb_categoria_n01 cat01)
         {
             if (ModelState.IsValid)
             {
-                using(EconobuyEntities db = new EconobuyEntities())
+                using (EconobuyEntities db = new EconobuyEntities())
                 {
                     var Cat = db.tb_categoria_n01.Add(cat01);
                     db.SaveChanges();
@@ -253,8 +314,9 @@ namespace Econobuy_Web.Controllers
             TempData["Cat01"] = nome;
             using (EconobuyEntities db = new EconobuyEntities())
             {
-                var cat = (from cat02 in db.tb_categoria_n02 where
-                           cat02.cat01_in_codigo == id
+                var cat = (from cat02 in db.tb_categoria_n02
+                           where
+cat02.cat01_in_codigo == id
                            select new CadastroProduto
                            {
                                Cat02ID = cat02.cat02_in_codigo,
@@ -362,9 +424,10 @@ namespace Econobuy_Web.Controllers
                 else
                 {
                     db.tb_produto.Add(pro);
-                    if (file.ContentLength > 0) { 
+                    if (file.ContentLength > 0)
+                    {
                         img.prod_in_codigo = pro.prod_in_codigo;
-                        db.tb_produto_img.Add(img); 
+                        db.tb_produto_img.Add(img);
                     }
                     db.SaveChanges();
                     return RedirectToAction("ConsultarProdutos", "Mercado");

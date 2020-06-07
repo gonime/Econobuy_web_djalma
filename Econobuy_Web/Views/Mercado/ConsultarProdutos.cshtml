@@ -9,10 +9,10 @@
     ViewBag.Title = "Produtos";
 }
 
-<h2>ConsultarProdutos</h2>
+<h2>Produtos</h2>
 
-<table class="table">
-    <tr>
+<table class="table table-hover table-bordered bg-light">
+    <tr class="bg-dark text-light">
         <th>
             @Html.DisplayNameFor(model => model.Nome)
         </th>
@@ -40,39 +40,40 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nome)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Preco)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Codigo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tradicional)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Ativo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categoria_01)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categoria_02)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categoria_03)
-        </td>
-        <td>
-            @Html.ActionLink("Visualizar", "EditarProduto", new { id = item.Id }) |
-            @Html.ActionLink("Ativar/Desativar", "AtivaProduto", new { confirm = true, id = item.Id }) |
-            @Html.ActionLink("Ativar/Desativar Tradicional", "AtivaTradProduto", new { confirm = true, id = item.Id }) |
-            @Html.ActionLink("Deletar", "DeletaProduto", new { confirm = true, id = item.Id }, new { onclick = "return confirm('Confirme a exclusão')" })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Preco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tradicional)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ativo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria_01)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria_02)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria_03)
+            </td>
+            <td>
+                @Html.ActionLink("Visualizar", "EditarProduto", new { id = item.Id }) |
+                @Html.ActionLink("Ativar/Desativar", "AtivaProduto", new { confirm = true, id = item.Id }) |
+                @Html.ActionLink("Ativar/Desativar Tradicional", "AtivaTradProduto", new { confirm = true, id = item.Id }) |
+                @Html.ActionLink("Deletar", "DeletaProduto", new { confirm = true, id = item.Id }, new { onclick = "return confirm('Confirme a exclusão')" })
+            </td>
+        </tr>
+    }
 
 </table>

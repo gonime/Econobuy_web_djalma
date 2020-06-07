@@ -245,18 +245,14 @@ namespace Econobuy_Web.Controllers
             int Id = Convert.ToInt32(Session["mercadoID"]);
             using (EconobuyEntities db = new EconobuyEntities())
             {
-                var model = (from prod in db.tb_produto
-                             join cat01
-  in db.tb_categoria_n01 on prod.cat01_in_codigo
-  equals cat01.cat01_in_codigo
-                             join cat02 in
-db.tb_categoria_n02 on prod.cat02_in_codigo
-equals cat02.cat02_in_codigo
-                             join cat03 in
-db.tb_categoria_n03 on prod.cat03_in_codigo
-equals cat03.cat03_in_codigo
-                             where
-prod.mer_in_codigo == Id
+                var model = (from prod in db.tb_produto join cat01
+                            in db.tb_categoria_n01 on prod.cat01_in_codigo
+                            equals cat01.cat01_in_codigo join cat02 in
+                            db.tb_categoria_n02 on prod.cat02_in_codigo
+                            equals cat02.cat02_in_codigo join cat03 in
+                            db.tb_categoria_n03 on prod.cat03_in_codigo
+                            equals cat03.cat03_in_codigo where
+                            prod.mer_in_codigo == Id
                              select new ConsultaProdutos
                              {
                                  Id = prod.prod_in_codigo,
@@ -398,6 +394,7 @@ cat02.cat01_in_codigo == id
         {
             HttpPostedFileBase file = Request.Files["img"];
             if (file.ContentLength > 0) prod.Imagem = ConvertToBytes(file);
+            else prod.Imagem = System.IO.File.ReadAllBytes(Server.MapPath(@"\Repository\Images\NoImg.png"));
             var pro = new tb_produto
             {
                 prod_bit_active = true,
@@ -424,7 +421,7 @@ cat02.cat01_in_codigo == id
                 else
                 {
                     db.tb_produto.Add(pro);
-                    if (file.ContentLength > 0)
+                    if (prod.Imagem != null)
                     {
                         img.prod_in_codigo = pro.prod_in_codigo;
                         db.tb_produto_img.Add(img);

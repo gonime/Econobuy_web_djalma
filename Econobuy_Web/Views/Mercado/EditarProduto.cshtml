@@ -84,14 +84,17 @@
     <script>
         $(document).ready(function () {
             $("#valor").inputmask({
-                mask: "#99[.99]",
+                mask: "999[.99]",
                 greedy: false,
+                positionCaretOnClick: "radixFocus",
+                numericInput: true,
                 definitions: {
                     '*': {
                         validator: "[0-9]"
                     }
                 },
-                rightAlign: false
+                rightAlign: false,
+                placeholder: "0"
             });
         });
     </script>

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Econobuy_Web.Models.VisualizarItens>
+
+@{
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
+    if (Session["clienteID"] == null)
+    {
+        Response.Redirect("~/Cliente/Index");
+    }
+    ViewBag.Title = "Itens do Pedido";
+}
+
+<h2>Itens do Pedido</h2>
+
+<table class="table table-hover table-bordered bg-light">
+    <tr class="bg-dark text-light">
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.valor_un)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Qtde)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.valor_total)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.valor_un)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Qtde)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.valor_total)
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Econobuy_Web.Models.ConsultaProdutos>
 
 @{
-    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
-    if (Session["mercadoID"] == null)
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
+    if (Session["clienteID"] == null)
     {
-        Response.Redirect("~/Mercado/Index");
+        Response.Redirect("~/Cliente/Index");
     }
     ViewBag.Title = "Produtos";
 }
@@ -18,15 +18,6 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Preco)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Codigo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Tradicional)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Ativo)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Categoria_01)
@@ -44,20 +35,11 @@
     {
         <tr>
             <td>
-                <div><img src="/Mercado/MostraImgProduto/@item.Id" alt="" height=150 width=150 /></div>
+                <div><img src="/Cliente/MostraImagemProduto/@item.Id" alt="" height=150 width=150 /></div>
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Preco)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Codigo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tradicional)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ativo)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Categoria_01)
@@ -69,10 +51,7 @@
                 @Html.DisplayFor(modelItem => item.Categoria_03)
             </td>
             <td>
-                @Html.ActionLink("Visualizar", "EditarProduto", new { id = item.Id }) |
-                @Html.ActionLink("Ativar/Desativar", "AtivaProduto", new { confirm = true, id = item.Id }) |
-                @Html.ActionLink("Ativar/Desativar Tradicional", "AtivaTradProduto", new { confirm = true, id = item.Id }) |
-                @Html.ActionLink("Deletar", "DeletaProduto", new { confirm = true, id = item.Id }, new { onclick = "return confirm('Confirme a exclusão')" })
+                @Html.ActionLink("Visualizar", "MostraProduto", new { id = item.Id }) 
             </td>
         </tr>
     }

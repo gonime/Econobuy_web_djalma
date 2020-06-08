@@ -1,0 +1,77 @@
+﻿@model Econobuy_Web.Models.CadastroProduto
+
+@{
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
+    if (Session["clienteID"] == null)
+    {
+        Response.Redirect("~/Cliente/Index");
+    }
+    ViewBag.Title = "MostraProduto";
+}
+
+<table class="table table-hover table-bordered bg-light">
+    <tr class="bg-dark text-light">
+        <th>
+            @Html.DisplayNameFor(model => model.Nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Valor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cat01)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cat02)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cat03)
+        </th>
+        <th></th>
+    </tr>
+
+    <tr>
+        <td>
+            <div><img src="/Cliente/MostraImagemProduto/@Model.ProdID" alt="" height=150 width=150 /></div>
+            @Html.DisplayFor(model => model.Nome)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Descricao)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Valor)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Cat01)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Cat02)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Cat03)
+        </td>
+        @Html.HiddenFor(model => model.ProdID)
+    </tr>
+
+</table>
+
+<div class="row" style="margin-top: 50px">
+    <div class="col-md-2"><h4>Quantidade:</h4></div>
+    <div class="col-md-1">
+        @Html.TextBoxFor(model => model.Qtde, new { type = "number", min = "1", max = "50" })
+    </div>
+    <!--
+    <div class="col-md-3">
+        @Html.ActionLink("Adicionar ao carrinho", "AdicionaAoCarrinho", "Cliente", new { ProdID_ = Model.ProdID, ProdNome_ = Model.Nome, Qtde_ = Model.Qtde, ValorUnidade_ = Model.Valor, ValorTotal_ = Model.Qtde*Model.Valor }, new {  @class = "btn btn-primary" })
+    </div>
+        -->
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/inputmask")
+<script>
+</script>
+}

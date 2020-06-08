@@ -39,5 +39,7 @@ namespace Econobuy_Web.Models
         public int Cat03ID { get; set; }
         public int ProdID { get; set; }
         public byte[] Imagem { get; set; }
+
+        public int Qtde { get; set; }
     }
 }

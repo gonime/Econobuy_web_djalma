@@ -1,10 +1,10 @@
 ﻿@model Econobuy_Web.Models.VisualizarPedido
 
 @{
-    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
-    if (Session["clienteID"] == null)
+    Layout = "~/Views/Shared/_LayoutMercado.cshtml";
+    if (Session["mercadoID"] == null)
     {
-        Response.Redirect("~/Cliente/Index");
+        Response.Redirect("~/Mercado/Index");
     }
     ViewBag.Title = "Visualizar Pedido";
 }
@@ -18,7 +18,7 @@
     <div class="form-horizontal">
         <hr />
         <div class="form-group">
-            <h3>Mercado</h3>
+            <h3>Cliente</h3>
             <div class="col-md-10">
                 @Html.DisplayFor(model => model.Mercado_Ou_Cliente, new { htmlAttributes = new { @class = "form-control" } })
             </div>
@@ -101,11 +101,11 @@
             </div>
         </div>
 
-                @Html.HiddenFor(model => model.PedID)
+        @Html.HiddenFor(model => model.PedID)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <btn>@Html.ActionLink("Ver Itens", "VisualizarItensPedido", "Cliente", new { id = Model.PedID }, new { @style = "color: white; text-decoration:none; ", @class = "btn btn-warning" })</btn>
+                <btn>@Html.ActionLink("Ver Itens", "VisualizarItensPedido", "Mercado", new { id = Model.PedID }, new { @style = "color: white; text-decoration:none; ", @class = "btn btn-warning" })</btn>
             </div>
         </div>
     </div>

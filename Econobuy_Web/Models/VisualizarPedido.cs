@@ -31,7 +31,6 @@ namespace Econobuy_Web.Models
         public string Status { get; set; }
         [Display(Name = "Valor")]
         public decimal Valor { get; set; }
-        [Display(Name = "Avaliação do Pedido")]
         public int PedID { get; set; }
     }
 }

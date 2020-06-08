@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Econobuy_Web.Models.ListaMercadosModoTradicional>
+
+@{
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
+    if (Session["clienteID"] == null)
+    {
+        Response.Redirect("~/Cliente/Index");
+    }
+    ViewBag.Title = "Pedido Tradicional";
+}
+
+<h2>Selecione um mercado</h2>
+
+<table class="table table-hover table-bordered bg-light">
+    <tr class="bg-dark text-light">
+        <th>
+            @Html.DisplayNameFor(model => model.Mercado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Avaliacao)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Bairro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Logradouro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Numero)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telefone_1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telefone_2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mercado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Avaliacao)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Bairro)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Logradouro)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Numero)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Telefone_1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Telefone_2)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.ActionLink("Selecionar", "ListarProdutosModoTradicional", new { id=item.MerID }) 
+        </td>
+    </tr>
+}
+
+</table>
+<p>Obs: Mercados com avaliação (0.00) ainda não foram avaliados!</p>

@@ -59,7 +59,7 @@ namespace Econobuy_Web.Controllers
                     tb_mercado me = db.tb_mercado.Find(merID);
                     me.mer_st_senha = senha;
                     db.SaveChanges();
-                    EnviaSenhaEmail(mer.mer_st_email, mer.mer_st_user, senha);
+                    EnviaSenhaEmail(me.mer_st_email, me.mer_st_user, senha);
                     TempData["Query"] = "Seus dados de acesso foram enviados para seu e-mail";
                     return View("RecuperarSenha", mer);
                 }
@@ -137,29 +137,61 @@ namespace Econobuy_Web.Controllers
             }
         }
 
-        public ActionResult VisualizarPedido(int ped_id)
+        public ActionResult VisualizarPedido(int id)
         {
-            int Id = Convert.ToInt32(Session["mercadoID"]);
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var model = (from en in db.tb_endereco
+                             join cli
+   in db.tb_cliente on en.end_in_codigo
+   equals cli.end_in_codigo
+                             join ped
+    in db.tb_pedido on cli.cli_in_codigo
+    equals ped.cli_in_codigo
+                             where
+    ped.ped_in_codigo == id
+                             select new VisualizarPedido
+                             {
+                                 Mercado_Ou_Cliente = cli.cli_st_nome,
+                                 Data = ped.data_dt_pedido,
+                                 CEP = en.end_st_CEP,
+                                 Cidade = en.end_st_cidade,
+                                 Bairro = en.end_st_bairro,
+                                 Logradouro = en.end_st_log,
+                                 Numero = en.end_st_num,
+                                 Email = cli.cli_st_email,
+                                 Telefone_1 = en.end_st_tel1,
+                                 Telefone_2 = en.end_st_tel2,
+                                 Status = ped.ped_status,
+                                 Valor = ped.ped_dec_valor,
+                                 PedID = ped.ped_in_codigo
+                             }
+                             ).First();
+                return View(model);
+            }
+        }
+
+        public ActionResult VisualizarItensPedido(int id)
+        {
             using (EconobuyEntities db = new EconobuyEntities())
             {
                 var model = (from ped in db.tb_pedido
-                             join cli in db.tb_cliente on
-                             ped.cli_in_codigo equals cli.cli_in_codigo
-                             join en in db.tb_endereco on ped.end_in_codigo
-                             equals en.end_in_codigo
-                             where ped.mer_in_codigo == Id
-                             select new ConsultaPedidosMercado
+                             join
+                            itn in db.tb_item on ped.ped_in_codigo
+                            equals itn.ped_in_codigo
+                             join
+                            prod in db.tb_produto on itn.prod_in_codigo
+                            equals prod.prod_in_codigo
+                             where ped.ped_in_codigo == id
+                             select new VisualizarItens
                              {
-                                 Id = ped.ped_in_codigo,
-                                 Valor = ped.ped_dec_valor,
-                                 Status = ped.ped_status,
-                                 Data = ped.data_dt_pedido,
-                                 Cliente = cli.cli_st_nome,
-                                 CEP = en.end_st_CEP,
-                                 Cidade = en.end_st_cidade,
-                                 Logradouro = en.end_st_log
+                                 Nome = prod.prod_st_nome,
+                                 valor_un = prod.prod_dec_valor_un,
+                                 Qtde = itn.item_in_qtde,
+                                 valor_total = prod.prod_dec_valor_un * itn.item_in_qtde,
+                                 codigo = prod.prod_st_cod_mer
                              }
-                             ).OrderBy(u => u.Status).ToList();
+                             ).OrderBy(u => u.Nome).ToList();
                 return View(model);
             }
         }
@@ -269,6 +301,7 @@ namespace Econobuy_Web.Controllers
                 return View(model);
             }
         }
+
 
         public ActionResult CadastrarProdutoDepartamento()
         {

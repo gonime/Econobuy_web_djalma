@@ -25,24 +25,30 @@
         <th>
             @Html.DisplayNameFor(model => model.valor_total)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.codigo)
+        </th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.valor_un)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Qtde)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.valor_total)
-            </td>
-        </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Nome)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.valor_un)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Qtde)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.valor_total)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.codigo)
+    </td>
+</tr>
     }
 
 </table>

@@ -18,5 +18,6 @@ namespace Econobuy_Web.Models
         public decimal valor_total { get; set; }
         [Display(Name = "Código")]
         public string codigo { get; set; }
+        public int ProdID { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Econobuy_Web.Models;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -92,76 +93,73 @@ namespace Econobuy_Web.Controllers
 
         public ActionResult Cadastro()
         {
-            return View();
+           return View();
         }
-
-        //public ActionResult ValidaCEP(CadastroCliente cad)
-        //{
-        //    try
-        //    {
-        //        var ws = new Econobuy_Web.WSCorreios.AtendeClienteClient();
-        //        var resposta = ws.consultaCEP(cad.CEP);
-        //        cad.Logradouro = resposta.end;
-        //        cad.Bairro = resposta.bairro;
-        //        cad.Cidade = resposta.cidade;
-        //        cad.UF = resposta.uf;
-        //        return RedirectToAction("Cadastro", "Cliente", new { cadastro = cad });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return View(cad);
-        //    }
-        //}
 
         [HttpPost]
-        public ActionResult CadastraCliente(CadastroCliente cad)
+        public ActionResult CadastraCliente(CadastroCliente cad, string submitButton)
         {
-            var end = new tb_endereco
-            {
-                end_st_bairro = cad.Bairro,
-                end_st_CEP = cad.CEP,
-                end_st_cidade = cad.Cidade,
-                end_st_compl = cad.Complemento,
-                end_st_log = cad.Logradouro,
-                end_st_num = cad.Numero,
-                end_st_uf = cad.UF,
-                end_st_tel1 = cad.Telefone_1,
-                end_st_tel2 = cad.Telefone_2
-            };
-            var cli = new tb_cliente
-            {
-                cli_st_CPF = cad.CPF,
-                cli_st_email = cad.email,
-                cli_st_nome = cad.Nome,
-                cli_st_senha = cad.Senha,
-                cli_st_user = cad.User,
-                cli_bit_active = true,
-                cli_bit_advert = false,
-                cli_bit_conf_email = false
-            };
-            using (EconobuyEntities db = new EconobuyEntities())
-            {
-                if (!ModelState.IsValid)
-                {
-                    return View("Cadastro", cad);
-                }
-                else
-                {
-                    db.tb_endereco.Add(end);
-                    cli.end_in_codigo = end.end_in_codigo;
-                    db.tb_cliente.Add(cli);
-                    db.SaveChanges();
-                    Session["clienteID"] = cli.cli_in_codigo;
-                    Session["clienteNome"] = cli.cli_st_nome;
-                    return RedirectToAction("Home", "Cliente");
-                }
+            switch (submitButton) {
+                case "Cadastrar":
+                    var end = new tb_endereco
+                    {
+                        end_st_bairro = cad.Bairro,
+                        end_st_CEP = cad.CEP,
+                        end_st_cidade = cad.Cidade,
+                        end_st_compl = cad.Complemento,
+                        end_st_log = cad.Logradouro,
+                        end_st_num = cad.Numero,
+                        end_st_uf = cad.UF,
+                        end_st_tel1 = cad.Telefone_1,
+                        end_st_tel2 = cad.Telefone_2
+                    };
+                    var cli = new tb_cliente
+                    {
+                        cli_st_CPF = cad.CPF,
+                        cli_st_email = cad.email,
+                        cli_st_nome = cad.Nome,
+                        cli_st_senha = cad.Senha,
+                        cli_st_user = cad.User,
+                        cli_bit_active = true,
+                        cli_bit_advert = false,
+                        cli_bit_conf_email = false
+                    };
+                    using (EconobuyEntities db = new EconobuyEntities())
+                    {
+                        if (!ModelState.IsValid)
+                        {
+                            return View("Cadastro", cad);
+                        }
+                        else
+                        {
+                            db.tb_endereco.Add(end);
+                            cli.end_in_codigo = end.end_in_codigo;
+                            db.tb_cliente.Add(cli);
+                            db.SaveChanges();
+                            Session["clienteID"] = cli.cli_in_codigo;
+                            Session["clienteNome"] = cli.cli_st_nome;
+                            return RedirectToAction("Home", "Cliente");
+                        }
+                    };
+                case "Validar CEP":
+                    try
+                    {
+                        var ws = new WSCorreios.AtendeClienteClient();
+                        var resposta = ws.consultaCEP(cad.CEP);
+                        cad.Logradouro = resposta.end;
+                        cad.Bairro = resposta.bairro;
+                        cad.Cidade = resposta.cidade;
+                        cad.UF = resposta.uf;
+                        return View("Cadastro", cad);
+                    }
+                    catch (Exception ex)
+                    {
+                        return View("Cadastro", cad);
+                    }
             }
+            return View("Cadastro", cad);
         }
 
-        /// <summary>
-        /// /////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// </summary>
-        /// <returns></returns>
 
         public ActionResult AlterarUsuario()
         {
@@ -234,10 +232,6 @@ namespace Econobuy_Web.Controllers
             return imageBytes;
         }
 
-        /// <summary>
-        /// ////////////////////////////////////////////////////////////////////////////////////////////////
-        /// </summary>
-        /// <returns></returns>
 
         public ActionResult Home()
         {

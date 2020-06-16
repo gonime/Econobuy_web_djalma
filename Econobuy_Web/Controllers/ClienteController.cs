@@ -160,68 +160,68 @@ namespace Econobuy_Web.Controllers
         }
 
 
-        public ActionResult AlterarUsuario()
-        {
-            int Id = Convert.ToInt32(Session["mercadoID"]);
-            using (EconobuyEntities db = new EconobuyEntities())
-            {
-                var alter = (from mer in db.tb_mercado
-                             join end in db.tb_endereco on
-                             mer.end_in_codigo equals end.end_in_codigo
-                             join merImg
-                             in db.tb_mercado_img on mer.mer_in_codigo
-                             equals merImg.mer_in_codigo
-                             where mer.mer_in_codigo == Id
-                             select new AlteraMercado
-                             {
-                                 User = mer.mer_st_user,
-                                 Senha = mer.mer_st_senha,
-                                 Email = mer.mer_st_email,
-                                 Telefone_1 = end.end_st_tel1,
-                                 Telefone_2 = end.end_st_tel2,
-                                 EndID = end.end_in_codigo,
-                                 MerID = mer.mer_in_codigo,
-                                 ImgID = merImg.mer_img_in_codigo
-                             });
-                if (alter != null)
-                {
-                    AlteraMercado alt = alter.First();
-                    return View(alt);
-                }
-                else return View();
-            }
-        }
+        //public ActionResult AlterarUsuario()
+        //{
+        //    int Id = Convert.ToInt32(Session["mercadoID"]);
+        //    using (EconobuyEntities db = new EconobuyEntities())
+        //    {
+        //        var alter = (from mer in db.tb_mercado
+        //                     join end in db.tb_endereco on
+        //                     mer.end_in_codigo equals end.end_in_codigo
+        //                     join merImg
+        //                     in db.tb_mercado_img on mer.mer_in_codigo
+        //                     equals merImg.mer_in_codigo
+        //                     where mer.mer_in_codigo == Id
+        //                     select new AlteraMercado
+        //                     {
+        //                         User = mer.mer_st_user,
+        //                         Senha = mer.mer_st_senha,
+        //                         Email = mer.mer_st_email,
+        //                         Telefone_1 = end.end_st_tel1,
+        //                         Telefone_2 = end.end_st_tel2,
+        //                         EndID = end.end_in_codigo,
+        //                         MerID = mer.mer_in_codigo,
+        //                         ImgID = merImg.mer_img_in_codigo
+        //                     });
+        //        if (alter != null)
+        //        {
+        //            AlteraMercado alt = alter.First();
+        //            return View(alt);
+        //        }
+        //        else return View();
+        //    }
+        //}
 
-        [HttpPost]
-        public ActionResult AlteraUsuario(AlteraMercado alt, HttpPostedFileBase imgMercado)
-        {
-            HttpPostedFileBase file = Request.Files["img"];
-            if (file.ContentLength > 0) alt.imgMercado = ConvertToBytes(file);
-            using (EconobuyEntities db = new EconobuyEntities())
-            {
-                if (!ModelState.IsValid)
-                {
-                    return View("AlterarUsuario", alt);
-                }
-                else
-                {
-                    tb_endereco end = db.tb_endereco.Find(alt.EndID);
-                    tb_mercado mer = db.tb_mercado.Find(alt.MerID);
-                    tb_mercado_img img = db.tb_mercado_img.Find(alt.ImgID);
-                    if (alt != null)
-                    {
-                        mer.mer_st_user = alt.User;
-                        mer.mer_st_senha = alt.Senha;
-                        mer.mer_st_email = alt.Email;
-                        end.end_st_tel1 = alt.Telefone_1;
-                        end.end_st_tel2 = alt.Telefone_2;
-                        if (alt.imgMercado != null) img.mer_img = alt.imgMercado;
-                    }
-                    db.SaveChanges();
-                    return RedirectToAction("ConsultarProdutos", "Mercado");
-                }
-            }
-        }
+        //[HttpPost]
+        //public ActionResult AlteraUsuario(AlteraMercado alt, HttpPostedFileBase imgMercado)
+        //{
+        //    HttpPostedFileBase file = Request.Files["img"];
+        //    if (file.ContentLength > 0) alt.imgMercado = ConvertToBytes(file);
+        //    using (EconobuyEntities db = new EconobuyEntities())
+        //    {
+        //        if (!ModelState.IsValid)
+        //        {
+        //            return View("AlterarUsuario", alt);
+        //        }
+        //        else
+        //        {
+        //            tb_endereco end = db.tb_endereco.Find(alt.EndID);
+        //            tb_mercado mer = db.tb_mercado.Find(alt.MerID);
+        //            tb_mercado_img img = db.tb_mercado_img.Find(alt.ImgID);
+        //            if (alt != null)
+        //            {
+        //                mer.mer_st_user = alt.User;
+        //                mer.mer_st_senha = alt.Senha;
+        //                mer.mer_st_email = alt.Email;
+        //                end.end_st_tel1 = alt.Telefone_1;
+        //                end.end_st_tel2 = alt.Telefone_2;
+        //                if (alt.imgMercado != null) img.mer_img = alt.imgMercado;
+        //            }
+        //            db.SaveChanges();
+        //            return RedirectToAction("ConsultarProdutos", "Mercado");
+        //        }
+        //    }
+        //}
 
         public byte[] ConvertToBytes(HttpPostedFileBase image)
         {
@@ -335,15 +335,12 @@ namespace Econobuy_Web.Controllers
                 int end_id = db.tb_cliente.Where(x => x.cli_in_codigo == Id).Select(x => x.end_in_codigo).SingleOrDefault();
                 tb_endereco end = db.tb_endereco.Find(end_id);
                 var model = (from av in db.tb_avaliacao_mercado
-                             join
-mer in db.tb_mercado on av.mer_in_codigo
-equals mer.mer_in_codigo
-                             join en
-    in db.tb_endereco on mer.end_in_codigo
-    equals en.end_in_codigo
-                             where
-     en.end_st_uf == end.end_st_uf &&
-     en.end_st_cidade == end.end_st_cidade
+                             join mer in db.tb_mercado on av.mer_in_codigo
+                             equals mer.mer_in_codigo join en
+                             in db.tb_endereco on mer.end_in_codigo
+                             equals en.end_in_codigo where
+                             en.end_st_uf == end.end_st_uf &&
+                             en.end_st_cidade == end.end_st_cidade
                              select new ListaMercadosModoTradicional
                              {
                                  Mercado = mer.mer_st_nome,
@@ -363,6 +360,7 @@ equals mer.mer_in_codigo
 
         public ActionResult ListarProdutosModoTradicional(int id)
         {
+            Session["mercadoTradID"] = id;
             using (EconobuyEntities db = new EconobuyEntities())
             {
                 var model = (from prod in db.tb_produto join cat01
@@ -372,8 +370,9 @@ equals mer.mer_in_codigo
                             equals cat02.cat02_in_codigo join cat03 in
                             db.tb_categoria_n03 on prod.cat03_in_codigo
                             equals cat03.cat03_in_codigo where
-                            prod.mer_in_codigo == id
-                                select new ConsultaProdutos
+                            prod.mer_in_codigo == id &&
+                             prod.prod_bit_trad_active == true
+                             select new ConsultaProdutos
                                 {
                                     Id = prod.prod_in_codigo,
                                     Nome = prod.prod_st_nome,
@@ -413,7 +412,7 @@ equals mer.mer_in_codigo
                              join cat03 in db.tb_categoria_n03 on prod.cat03_in_codigo
                              equals cat03.cat03_in_codigo
                              where prod.prod_in_codigo == id
-                             select new CadastroProduto
+                             select new CarrinhoTrad
                              {
                                  Nome = prod.prod_st_nome,
                                  Descricao = prod.prod_st_descricao,
@@ -428,22 +427,67 @@ equals mer.mer_in_codigo
             }
         }
 
-        //public ActionResult AdicionaAoCarrinho(int ProdID_, string ProdNome_, int Qtde_, decimal ValorUnidade_, decimal ValorTotal_)
-        //{
-        //    using (TempItemDBContext db = new TempItemDBContext())
-        //    {
-        //        var Carrinho = new Carrinho
-        //        {
-        //            ProdID = ProdID_,
-        //            ProdNome = ProdNome_,
-        //            Qtde = Qtde_,
-        //            ValorUnidade = ValorUnidade_,
-        //            ValorTotal = ValorTotal_
-        //        };
-        //        db.Carrinhos.Add(Carrinho);
-        //        db.SaveChanges();
-        //        return View();
-        //    }
-        //}
+        [HttpPost]
+        public ActionResult AdicionaAoCarrinhoTrad(CarrinhoTrad item)
+        {
+
+            if (ModelState.IsValid)
+            {
+                item.ValorTotal = item.Valor * item.Qtde;
+                CarrinhoTemp.ArmazenaItens(item);
+                return RedirectToAction("ListaCarrinhoTrad", "Cliente");
+            }
+                return View();
+            
+        }
+
+        public ActionResult ListaCarrinhoTrad()
+        {
+            var carrinho = CarrinhoTemp.RetornaItens();
+            return View(carrinho);
+        }
+
+        public ActionResult DeletaItemCarrinhoTrad(int id)
+        {
+            CarrinhoTemp.RemoveItem(id);
+            return RedirectToAction("ListaCarrinhoTrad", "Cliente");
+        }
+
+        public ActionResult FinalizaPedidoTrad()
+        {
+            decimal valor = 0;
+            var carrinho = CarrinhoTemp.RetornaItens().ToList();
+            foreach (var item in carrinho)
+            {
+                valor += item.ValorTotal;
+            }
+            int Id = Convert.ToInt32(Session["mercadoTradID"]);
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var model = (from av in db.tb_avaliacao_mercado
+                             join mer in db.tb_mercado on av.mer_in_codigo
+                             equals mer.mer_in_codigo join en
+                             in db.tb_endereco on mer.end_in_codigo
+                             equals en.end_in_codigo where
+                             mer.mer_in_codigo == Id
+                             select new FinalizaPedidoTrad
+                             {
+                                 Mercado = mer.mer_st_nome,
+                                 AvMer = av.av_mer_dec_nota,
+                                 CEP = en.end_st_CEP,
+                                 Cidade = en.end_st_cidade,
+                                 Bairro = en.end_st_bairro,
+                                 Logradouro = en.end_st_log,
+                                 Complemento = en.end_st_compl,
+                                 Email = mer.mer_st_email,
+                                 Telefone_1 = en.end_st_tel1,
+                                 Telefone_2 = en.end_st_tel2,
+                                 Valor = valor
+                             }
+                             ).First();
+                model.Carrinho_ = carrinho;
+                return View(model);
+            }
+        }
     }
 }

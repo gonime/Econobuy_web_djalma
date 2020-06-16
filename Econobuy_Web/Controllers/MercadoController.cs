@@ -535,7 +535,7 @@ cat02.cat01_in_codigo == id
                 else return View(cad);
             }
         }
-        public ActionResult AtivaProduto(bool confirm, int id)
+        public ActionResult AtivaProduto(int id)
         {
             using (EconobuyEntities db = new EconobuyEntities())
             {
@@ -545,7 +545,7 @@ cat02.cat01_in_codigo == id
                 return RedirectToAction("ConsultarProdutos", "Mercado");
             }
         }
-        public ActionResult AtivaTradProduto(bool confirm, int id)
+        public ActionResult AtivaTradProduto(int id)
         {
             using (EconobuyEntities db = new EconobuyEntities())
             {

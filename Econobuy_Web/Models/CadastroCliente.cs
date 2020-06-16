@@ -19,6 +19,7 @@ namespace Econobuy_Web.Models
         [Required(ErrorMessage = "Este campo é obrigatório")]
         [DataType(DataType.Password)]
         [Display(Name = "Senha")]
+        [MinLength(8)]
         [MaxLength(20)]
         public string Senha { get; set; }
         [Display(Name = "CPF")]

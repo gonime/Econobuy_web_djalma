@@ -133,7 +133,6 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\MoneyMaskBundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Connected Services\WSCorreios\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -149,10 +148,12 @@
     <Compile Include="Models\AlteraMercado.cs" />
     <Compile Include="Models\CadastroCliente.cs" />
     <Compile Include="Models\CadastroProduto.cs" />
-    <Compile Include="Models\Carrinho.cs" />
+    <Compile Include="Models\CarrinhoTrad.cs" />
+    <Compile Include="Models\CarrinhoTemp.cs" />
     <Compile Include="Models\ConsultaPedidosCliente.cs" />
     <Compile Include="Models\ConsultaPedidosMercado.cs" />
     <Compile Include="Models\ConsultaProdutos.cs" />
+    <Compile Include="Models\FinalizaPedidoTrad.cs" />
     <Compile Include="Models\ListaMercadosModoTradicional.cs" />
     <Compile Include="Models\Model1.Context.cs">
       <AutoGen>True</AutoGen>
@@ -223,7 +224,6 @@
     <Compile Include="Models\tb_produto_img.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TempItemDBContext.cs" />
     <Compile Include="Models\VisualizarItens.cs" />
     <Compile Include="Models\VisualizarPedido.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -592,6 +592,8 @@
     <Content Include="Views\Cliente\VisualizarItensPedido.cshtml" />
     <Content Include="Views\Mercado\VisualizarPedido.cshtml" />
     <Content Include="Views\Mercado\VisualizarItensPedido.cshtml" />
+    <Content Include="Views\Cliente\ListaCarrinhoTrad.cshtml" />
+    <Content Include="Views\Cliente\FinalizaPedidoTrad.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

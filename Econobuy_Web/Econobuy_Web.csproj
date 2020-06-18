@@ -149,7 +149,7 @@
     <Compile Include="Models\CadastroCliente.cs" />
     <Compile Include="Models\CadastroProduto.cs" />
     <Compile Include="Models\CarrinhoTrad.cs" />
-    <Compile Include="Models\CarrinhoTemp.cs" />
+    <Compile Include="Models\CarrinhoTradTemp.cs" />
     <Compile Include="Models\ConsultaPedidosCliente.cs" />
     <Compile Include="Models\ConsultaPedidosMercado.cs" />
     <Compile Include="Models\ConsultaProdutos.cs" />

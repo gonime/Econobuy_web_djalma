@@ -13,13 +13,17 @@ namespace Econobuy_Web.Models
         public int ProdID { get; set; }
         public string Nome { get; set; }
         [Required(ErrorMessage = "Adicione pelo menos uma unidade")]
+        [Display(Name = "Quantidade")]
         public int Qtde { get; set; }
         public decimal Valor { get; set; }
         public decimal ValorTotal { get; set; }
-
+        [Display(Name = "Departamento")]
         public string Cat01 { get; set; }
+        [Display(Name = "Categoria")]
         public string Cat02 { get; set; }
+        [Display(Name = "Produto")]
         public string Cat03 { get; set; }
+        [Display(Name = "Descrição")]
         public string Descricao { get; set; }
     }
 }

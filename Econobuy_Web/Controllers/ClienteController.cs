@@ -357,6 +357,27 @@ namespace Econobuy_Web.Controllers
                 return View(model);
             }
         }
+        public ActionResult excluirPedidoTrad()
+        {
+            Session["mercadoTradID"] = null;
+            Session["Itens"] = null;
+            return RedirectToAction("NovoPedidoTradicional", "Cliente");
+        }
+
+
+        public ActionResult MostraLogoMercado(int Id)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var result = (from img in db.tb_mercado_img where img.mer_in_codigo == Id select img.mer_img).First();
+                if (result.Any())
+                {
+                    byte[] logo = result;
+                    return File(logo, "image/jpg");
+                }
+                else return null;
+            }
+        }
 
         public ActionResult ListarProdutosModoTradicional(int id)
         {
@@ -371,7 +392,8 @@ namespace Econobuy_Web.Controllers
                             db.tb_categoria_n03 on prod.cat03_in_codigo
                             equals cat03.cat03_in_codigo where
                             prod.mer_in_codigo == id &&
-                             prod.prod_bit_trad_active == true
+                             prod.prod_bit_trad_active == true &&
+                             prod.prod_bit_active == true
                              select new ConsultaProdutos
                                 {
                                     Id = prod.prod_in_codigo,
@@ -434,7 +456,7 @@ namespace Econobuy_Web.Controllers
             if (ModelState.IsValid)
             {
                 item.ValorTotal = item.Valor * item.Qtde;
-                CarrinhoTemp.ArmazenaItens(item);
+                CarrinhoTradTemp.ArmazenaItens(item);
                 return RedirectToAction("ListaCarrinhoTrad", "Cliente");
             }
                 return View();
@@ -443,20 +465,20 @@ namespace Econobuy_Web.Controllers
 
         public ActionResult ListaCarrinhoTrad()
         {
-            var carrinho = CarrinhoTemp.RetornaItens();
+            var carrinho = CarrinhoTradTemp.RetornaItens();
             return View(carrinho);
         }
 
         public ActionResult DeletaItemCarrinhoTrad(int id)
         {
-            CarrinhoTemp.RemoveItem(id);
+            CarrinhoTradTemp.RemoveItem(id);
             return RedirectToAction("ListaCarrinhoTrad", "Cliente");
         }
 
         public ActionResult FinalizaPedidoTrad()
         {
             decimal valor = 0;
-            var carrinho = CarrinhoTemp.RetornaItens().ToList();
+            var carrinho = CarrinhoTradTemp.RetornaItens().ToList();
             foreach (var item in carrinho)
             {
                 valor += item.ValorTotal;
@@ -487,6 +509,46 @@ namespace Econobuy_Web.Controllers
                              ).First();
                 model.Carrinho_ = carrinho;
                 return View(model);
+            }
+        }
+
+        public ActionResult FinalizarPedidoTrad(FinalizaPedidoTrad tr)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                int cli_id = Convert.ToInt32(Session["clienteID"]);
+                int end_id = db.tb_cliente.Where(x => x.cli_in_codigo == cli_id).Select(x => x.end_in_codigo).SingleOrDefault();
+                int mer_id = Convert.ToInt32(Session["mercadoTradID"]);
+                var ped = new tb_pedido
+                {
+                    cli_in_codigo = cli_id,
+                    mer_in_codigo = mer_id,
+                    data_dt_pedido = DateTime.Now,
+                    end_in_codigo = end_id,
+                    ped_status = "Aguardando",
+                    ped_st_msg = "",
+                    ped_dec_valor = 0
+                };
+                db.tb_pedido.Add(ped);
+                decimal valor = 0;
+                var carrinho = CarrinhoTradTemp.RetornaItens().ToList();
+                foreach (var pro in carrinho)
+                {
+                    var item = new tb_item
+                    {
+                        prod_in_codigo = pro.ProdID,
+                        ped_in_codigo = ped.ped_in_codigo,
+                        item_in_qtde = pro.Qtde,
+                        item_dec_valor = pro.ValorTotal
+                    };
+                    valor += pro.ValorTotal;
+                    db.tb_item.Add(item);
+                }
+                ped.ped_dec_valor = valor;
+                db.SaveChanges();
+                return RedirectToAction("VisualizarPedido", "Cliente", new { Id = ped.ped_in_codigo });
+
+
             }
         }
     }

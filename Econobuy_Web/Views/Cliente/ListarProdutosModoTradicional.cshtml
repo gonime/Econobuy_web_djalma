@@ -9,6 +9,13 @@
     ViewBag.Title = "Produtos";
 }
 
+
+<div>
+    <button type="button" class="btn btn-outline-warning active  text-white text-decoration-none">
+        @Html.ActionLink("Escolher outro mercado", "excluirPedidoTrad", new { area = "" }, new { @style = "color: white; text-decoration:none; " })
+    </button>
+</div>
+
 <h2>Produtos</h2>
 
 <table class="table table-hover table-bordered bg-light">
@@ -51,9 +58,11 @@
                 @Html.DisplayFor(modelItem => item.Categoria_03)
             </td>
             <td>
-                @Html.ActionLink("Visualizar", "MostraProduto", new { id = item.Id }) 
+                @Html.ActionLink("Visualizar", "MostraProduto", new { id = item.Id })
             </td>
         </tr>
     }
 
 </table>
+
+

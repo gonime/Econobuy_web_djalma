@@ -6,14 +6,12 @@
     {
         Response.Redirect("~/Cliente/Index");
     }
-    ViewBag.Title = "FinalizaPedidoTrad";
+    ViewBag.Title = "Finalizar Pedido";
 }
 
 
 <div class="form-horizontal">
-    <hr />
     <div class="form-group">
-        <h3>Mercado</h3>
         <div class="form-group">
             <h3>Mercado</h3>
             <div class="col-md-10">
@@ -82,9 +80,6 @@
             <table class="table table-hover table-bordered bg-light">
                 <tr class="bg-dark text-light">
                     <th>
-                        @Html.DisplayNameFor(model => item.ProdID)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => item.Nome)
                     </th>
                     <th>
@@ -97,25 +92,13 @@
                         @Html.DisplayNameFor(model => item.ValorTotal)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => item.Cat01)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => item.Cat02)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => item.Cat03)
-                    </th>
-                    <th>
                         @Html.DisplayNameFor(model => item.Descricao)
                     </th>
-                    <th></th>
                 </tr>
 
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ProdID)
-                    </td>
-                    <td>
+                        <div><img src="/Cliente/MostraImagemProduto/@item.ProdID" alt="" height=150 width=150 /></div>
                         @Html.DisplayFor(modelItem => item.Nome)
                     </td>
                     <td>
@@ -128,22 +111,15 @@
                         @Html.DisplayFor(modelItem => item.ValorTotal)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Cat01)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Cat02)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Cat03)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Descricao)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Remover", "DeletaItemCarrinho", new { id = item.Id }, new { onclick = "return confirm('Confirme a remoção')" })
                     </td>
                 </tr>
             </table>
         }
-        </div>
+    </div>
+</div>
+<div class="text-center">
+    <button type="button" class="btn btn-outline-warning active btn-lg  text-white text-decoration-none">
+        @Html.ActionLink("Finalizar Pedido", "FinalizarPedidoTrad", new { area = "" }, new { @style = "color: white; text-decoration:none; " })
+    </button>
 </div>

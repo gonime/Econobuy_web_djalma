@@ -5,7 +5,7 @@ using System.Web;
 
 namespace Econobuy_Web.Models
 {
-    public class CarrinhoTemp
+    public class CarrinhoTradTemp
     {
         const string ItensID = "Itens";
 
@@ -25,15 +25,12 @@ namespace Econobuy_Web.Models
             HttpContext.Current.Session[ItensID] = pedidos;
         }
 
-        internal static void RemovePedidos()
-        {
-            HttpContext.Current.Session[ItensID] = new List<CarrinhoTrad>();
-        }
 
         internal static List<CarrinhoTrad> RetornaItens()
         {
             return HttpContext.Current.Session[ItensID] != null ?
                 (List<CarrinhoTrad>)HttpContext.Current.Session[ItensID] : null;
         }
+
     }
 }

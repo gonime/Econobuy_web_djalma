@@ -6,6 +6,10 @@
     {
         Response.Redirect("~/Cliente/Index");
     }
+    if(Session["mercadoTradID"] != null)
+    {
+        Response.Redirect("~/Cliente/ListarProdutosModoTradicional/" + Convert.ToInt32(Session["mercadoTradID"]));
+    }
     ViewBag.Title = "Pedido Tradicional";
 }
 
@@ -43,6 +47,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+            <div><img src="/Cliente/MostraLogoMercado/@item.MerID" alt="" height=150 width=150 /></div>
             @Html.DisplayFor(modelItem => item.Mercado)
         </td>
         <td>

@@ -32,5 +32,7 @@ namespace Econobuy_Web.Models
         [Display(Name = "Valor")]
         public decimal Valor { get; set; }
         public int PedID { get; set; }
+
+        public List<VisualizarItens> Itens { get; set; }
     }
 }

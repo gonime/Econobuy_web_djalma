@@ -123,6 +123,10 @@ namespace Econobuy_Web.Controllers
                         cli_bit_advert = false,
                         cli_bit_conf_email = false
                     };
+                    var av = new tb_avaliacao_cliente
+                    {
+                        av_cli_dec_nota = 0
+                    };
                     using (EconobuyEntities db = new EconobuyEntities())
                     {
                         if (!ModelState.IsValid)
@@ -134,6 +138,8 @@ namespace Econobuy_Web.Controllers
                             db.tb_endereco.Add(end);
                             cli.end_in_codigo = end.end_in_codigo;
                             db.tb_cliente.Add(cli);
+                            av.cli_in_codigo = cli.cli_in_codigo;
+                            db.tb_avaliacao_cliente.Add(av);
                             db.SaveChanges();
                             Session["clienteID"] = cli.cli_in_codigo;
                             Session["clienteNome"] = cli.cli_st_nome;
@@ -268,15 +274,14 @@ namespace Econobuy_Web.Controllers
         {
             using (EconobuyEntities db = new EconobuyEntities())
             {
-                var model = (from en in db.tb_endereco
-                             join mer
-   in db.tb_mercado on en.end_in_codigo
-   equals mer.end_in_codigo
-                             join ped
-    in db.tb_pedido on mer.mer_in_codigo
-    equals ped.mer_in_codigo
-                             where
-    ped.ped_in_codigo == id
+                var model = (from en in db.tb_endereco  join mer
+                            in db.tb_mercado on en.end_in_codigo
+                            equals mer.end_in_codigo
+                            join ped
+                            in db.tb_pedido on mer.mer_in_codigo
+                            equals ped.mer_in_codigo
+                            where
+                            ped.ped_in_codigo == id
                              select new VisualizarPedido
                              {
                                  Mercado_Ou_Cliente = mer.mer_st_nome,
@@ -294,15 +299,7 @@ namespace Econobuy_Web.Controllers
                                  PedID = ped.ped_in_codigo
                              }
                              ).First();
-                return View(model);
-            }
-        }
-
-        public ActionResult VisualizarItensPedido(int id)
-        {
-            using (EconobuyEntities db = new EconobuyEntities())
-            {
-                var model = (from ped in db.tb_pedido
+                var itens = (from ped in db.tb_pedido
                              join
                             itn in db.tb_item on ped.ped_in_codigo
                             equals itn.ped_in_codigo
@@ -315,12 +312,56 @@ namespace Econobuy_Web.Controllers
                                  Nome = prod.prod_st_nome,
                                  valor_un = prod.prod_dec_valor_un,
                                  Qtde = itn.item_in_qtde,
-                                 valor_total = prod.prod_dec_valor_un * itn.item_in_qtde
+                                 valor_total = prod.prod_dec_valor_un * itn.item_in_qtde,
+                                 ProdID = prod.prod_in_codigo
                              }
                              ).OrderBy(u => u.Nome).ToList();
+                model.Itens = itens;
                 return View(model);
             }
         }
+
+        public ActionResult marcarPedidoEntregue(int id)
+        {
+            using(EconobuyEntities db = new EconobuyEntities())
+            {
+                tb_pedido end = db.tb_pedido.Find(id);
+                end.ped_status = "Entregue";
+                db.SaveChanges();
+                return RedirectToAction("avaliaPedidoEntregue", "Cliente", new { id = id });
+            }
+        }
+
+        public ActionResult avaliaPedidoEntregue(int id)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                TempData["pedID"] = id;
+                int merID = db.tb_pedido.Where(x => x.ped_in_codigo == id).Select(x => x.mer_in_codigo).SingleOrDefault();
+                int AvMerID = db.tb_avaliacao_mercado.Where(x => x.mer_in_codigo == merID).Select(x => x.av_mer_in_codigo).SingleOrDefault();
+                TempData["AvMerID"] = AvMerID;
+                return View();
+            }
+        }
+
+        public ActionResult avaliarPedidoEntregue(tb_pedido_avaliacao_cliente pedav)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                var av = new tb_pedido_avaliacao_cliente
+                {
+                    av_mer_in_codigo = Convert.ToInt32(TempData["AvMerID"]),
+                    ped_av_cli_dec_nota = pedav.ped_av_cli_dec_nota,
+                    ped_av_cli_st_descricao = pedav.ped_av_cli_st_descricao,
+                    ped_in_codigo = Convert.ToInt32(TempData["pedID"]),
+                    ped_bit_active = true
+                };
+                db.tb_pedido_avaliacao_cliente.Add(av);
+                db.SaveChanges();
+                return RedirectToAction("VisualizarPedido", "Cliente", new { Id = av.ped_in_codigo });
+            }
+        }
+
         public ActionResult Logout()
         {
             Session.Abandon();
@@ -392,18 +433,18 @@ namespace Econobuy_Web.Controllers
                             db.tb_categoria_n03 on prod.cat03_in_codigo
                             equals cat03.cat03_in_codigo where
                             prod.mer_in_codigo == id &&
-                             prod.prod_bit_trad_active == true &&
-                             prod.prod_bit_active == true
-                             select new ConsultaProdutos
-                                {
-                                    Id = prod.prod_in_codigo,
-                                    Nome = prod.prod_st_nome,
-                                    Preco = prod.prod_dec_valor_un,
-                                    Categoria_01 = cat01.cat01_st_nome,
-                                    Categoria_02 = cat02.cat02_st_nome,
-                                    Categoria_03 = cat03.cat03_st_nome
-                                }
-                                ).OrderBy(u => u.Nome).ToList();
+                            prod.prod_bit_trad_active == true &&
+                            prod.prod_bit_active == true
+                            select new ConsultaProdutos
+                            {
+                                Id = prod.prod_in_codigo,
+                                Nome = prod.prod_st_nome,
+                                Preco = prod.prod_dec_valor_un,
+                                Categoria_01 = cat01.cat01_st_nome,
+                                Categoria_02 = cat02.cat02_st_nome,
+                                Categoria_03 = cat03.cat03_st_nome
+                            }
+                            ).OrderBy(u => u.Nome).ToList();
                 return View(model);
             }
         }
@@ -507,7 +548,7 @@ namespace Econobuy_Web.Controllers
                                  Valor = valor
                              }
                              ).First();
-                model.Carrinho_ = carrinho;
+                model.Carrinho = carrinho;
                 return View(model);
             }
         }
@@ -546,10 +587,12 @@ namespace Econobuy_Web.Controllers
                 }
                 ped.ped_dec_valor = valor;
                 db.SaveChanges();
+                Session["mercadoTradID"] = null;
+                Session["Itens"] = null;
                 return RedirectToAction("VisualizarPedido", "Cliente", new { Id = ped.ped_in_codigo });
-
-
             }
         }
+
+
     }
 }

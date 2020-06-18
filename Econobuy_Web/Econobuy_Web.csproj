@@ -589,11 +589,12 @@
     <Content Include="Views\Cliente\NovoPedidoTradicional.cshtml" />
     <Content Include="Views\Cliente\ListarProdutosModoTradicional.cshtml" />
     <Content Include="Views\Cliente\MostraProduto.cshtml" />
-    <Content Include="Views\Cliente\VisualizarItensPedido.cshtml" />
     <Content Include="Views\Mercado\VisualizarPedido.cshtml" />
-    <Content Include="Views\Mercado\VisualizarItensPedido.cshtml" />
     <Content Include="Views\Cliente\ListaCarrinhoTrad.cshtml" />
     <Content Include="Views\Cliente\FinalizaPedidoTrad.cshtml" />
+    <Content Include="Views\Cliente\avaliaPedidoEntregue.cshtml" />
+    <Content Include="Views\Mercado\aprovaPedido.cshtml" />
+    <Content Include="Views\Mercado\reprovaPedido.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

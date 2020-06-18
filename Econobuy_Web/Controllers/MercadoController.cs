@@ -167,15 +167,7 @@ namespace Econobuy_Web.Controllers
                                  PedID = ped.ped_in_codigo
                              }
                              ).First();
-                return View(model);
-            }
-        }
-
-        public ActionResult VisualizarItensPedido(int id)
-        {
-            using (EconobuyEntities db = new EconobuyEntities())
-            {
-                var model = (from ped in db.tb_pedido
+                var itens = (from ped in db.tb_pedido
                              join
                             itn in db.tb_item on ped.ped_in_codigo
                             equals itn.ped_in_codigo
@@ -189,10 +181,46 @@ namespace Econobuy_Web.Controllers
                                  valor_un = prod.prod_dec_valor_un,
                                  Qtde = itn.item_in_qtde,
                                  valor_total = prod.prod_dec_valor_un * itn.item_in_qtde,
-                                 codigo = prod.prod_st_cod_mer
+                                 ProdID = prod.prod_in_codigo
                              }
                              ).OrderBy(u => u.Nome).ToList();
+                model.Itens = itens;
                 return View(model);
+            }
+        }
+        public ActionResult aprovaPedido(int id)
+        {
+            TempData["pedID"] = id;
+            return View();
+        }
+
+        public ActionResult reprovaPedido(int id)
+        {
+            TempData["pedID"] = id;
+            return View();
+        }
+
+        public ActionResult aprovarPedido(tb_pedido ped)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                tb_pedido p = db.tb_pedido.Find(Convert.ToInt32(TempData["pedID"]));
+                p.ped_status = "Aprovado";
+                p.ped_st_msg = ped.ped_st_msg;
+                db.SaveChanges();
+                return RedirectToAction("VisualizarPedido", "Mercado", new { id = Convert.ToInt32(TempData["pedID"]) });
+            }
+        }
+
+        public ActionResult reprovarPedido(tb_pedido ped)
+        {
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                tb_pedido p = db.tb_pedido.Find(Convert.ToInt32(TempData["pedID"]));
+                p.ped_status = "Reprovado";
+                p.ped_st_msg = ped.ped_st_msg;
+                db.SaveChanges();
+                return RedirectToAction("VisualizarPedido", "Mercado", new { id = Convert.ToInt32(TempData["pedID"]) });
             }
         }
 

@@ -1,6 +1,11 @@
 ﻿@model IEnumerable<Econobuy_Web.Models.CarrinhoTrad>
 
 @{
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
+    if (Session["clienteID"] == null)
+    {
+        Response.Redirect("~/Cliente/Index");
+    }
     ViewBag.Title = "Carrinho";
 }
 
@@ -36,6 +41,7 @@
     {
         <tr>
             <td>
+                <div><img src="/Cliente/MostraImagemProduto/@item.ProdID" alt="" height=150 width=150 /></div>
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>

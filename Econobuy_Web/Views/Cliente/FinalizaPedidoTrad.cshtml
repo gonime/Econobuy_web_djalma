@@ -75,27 +75,27 @@
                 @Html.DisplayFor(model => model.Valor, new { htmlAttributes = new { @class = "form-control" } })
             </div>
         </div>
-        @foreach (var item in Model.Carrinho_)
-        {
-            <table class="table table-hover table-bordered bg-light">
-                <tr class="bg-dark text-light">
-                    <th>
-                        @Html.DisplayNameFor(model => item.Nome)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => item.Qtde)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => item.Valor)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => item.ValorTotal)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => item.Descricao)
-                    </th>
-                </tr>
-
+       
+        <table class="table table-hover table-bordered bg-light">
+            <tr class="bg-dark text-light">
+                <th>
+                    @Html.DisplayNameFor(model => model.Carrinho[0].Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Carrinho[0].Qtde)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Carrinho[0].Valor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Carrinho[0].ValorTotal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Carrinho[0].Descricao)
+                </th>
+            </tr>
+            @foreach (var item in Model.Carrinho)
+            {
                 <tr>
                     <td>
                         <div><img src="/Cliente/MostraImagemProduto/@item.ProdID" alt="" height=150 width=150 /></div>
@@ -114,8 +114,8 @@
                         @Html.DisplayFor(modelItem => item.Descricao)
                     </td>
                 </tr>
-            </table>
-        }
+            }
+        </table>
     </div>
 </div>
 <div class="text-center">

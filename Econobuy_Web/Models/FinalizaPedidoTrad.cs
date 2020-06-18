@@ -19,6 +19,6 @@ namespace Econobuy_Web.Models
         public string Telefone_1 { get; set; }
         public string Telefone_2 { get; set; }
 
-        public List<CarrinhoTrad> Carrinho_ { get; set; }
+        public List<CarrinhoTrad> Carrinho { get; set; }
     }
 }

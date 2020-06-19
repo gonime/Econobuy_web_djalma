@@ -95,139 +95,56 @@ namespace Econobuy_Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult CadastraCliente(CadastroCliente cad, string submitButton)
+        public ActionResult CadastraCliente(CadastroCliente cad)
         {
-            switch (submitButton)
+            var end = new tb_endereco
             {
-                case "Cadastrar":
-                    var end = new tb_endereco
-                    {
-                        end_st_bairro = cad.Bairro,
-                        end_st_CEP = cad.CEP,
-                        end_st_cidade = cad.Cidade,
-                        end_st_compl = cad.Complemento,
-                        end_st_log = cad.Logradouro,
-                        end_st_num = cad.Numero,
-                        end_st_uf = cad.UF,
-                        end_st_tel1 = cad.Telefone_1,
-                        end_st_tel2 = cad.Telefone_2
-                    };
-                    var cli = new tb_cliente
-                    {
-                        cli_st_CPF = cad.CPF,
-                        cli_st_email = cad.email,
-                        cli_st_nome = cad.Nome,
-                        cli_st_senha = cad.Senha,
-                        cli_st_user = cad.User,
-                        cli_bit_active = true,
-                        cli_bit_advert = false,
-                        cli_bit_conf_email = false
-                    };
-                    var av = new tb_avaliacao_cliente
-                    {
-                        av_cli_dec_nota = 0
-                    };
-                    using (EconobuyEntities db = new EconobuyEntities())
-                    {
-                        if (!ModelState.IsValid)
-                        {
-                            return View("Cadastro", cad);
-                        }
-                        else
-                        {
-                            db.tb_endereco.Add(end);
-                            cli.end_in_codigo = end.end_in_codigo;
-                            db.tb_cliente.Add(cli);
-                            av.cli_in_codigo = cli.cli_in_codigo;
-                            db.tb_avaliacao_cliente.Add(av);
-                            db.SaveChanges();
-                            Session["clienteID"] = cli.cli_in_codigo;
-                            Session["clienteNome"] = cli.cli_st_nome;
-                            return RedirectToAction("Home", "Cliente");
-                        }
-                    };
-                case "Validar CEP":
-                    try
-                    {
-                        var ws = new WSCorreios.AtendeClienteClient();
-                        var resposta = ws.consultaCEP(cad.CEP);
-                        cad.Logradouro = resposta.end;
-                        cad.Bairro = resposta.bairro;
-                        cad.Cidade = resposta.cidade;
-                        cad.UF = resposta.uf;
-                        return View("Cadastro", cad);
-                    }
-                    catch 
-                    {
-                        return View("Cadastro", cad);
-                    }
-            }
-            return View("Cadastro", cad);
+                end_st_bairro = cad.Bairro,
+                end_st_CEP = cad.CEP,
+                end_st_cidade = cad.Cidade,
+                end_st_compl = cad.Complemento,
+                end_st_log = cad.Logradouro,
+                end_st_num = cad.Numero,
+                end_st_uf = cad.UF,
+                end_st_tel1 = cad.Telefone_1,
+                end_st_tel2 = cad.Telefone_2
+            };
+            var cli = new tb_cliente
+            {
+                cli_st_CPF = cad.CPF,
+                cli_st_email = cad.email,
+                cli_st_nome = cad.Nome,
+                cli_st_senha = cad.Senha,
+                cli_st_user = cad.User,
+                cli_bit_active = true,
+                cli_bit_advert = false,
+                cli_bit_conf_email = false
+            };
+            var av = new tb_avaliacao_cliente
+            {
+                av_cli_dec_nota = 0
+            };
+            using (EconobuyEntities db = new EconobuyEntities())
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View("Cadastro", cad);
+                }
+                else
+                {
+                    db.tb_endereco.Add(end);
+                    cli.end_in_codigo = end.end_in_codigo;
+                    db.tb_cliente.Add(cli);
+                    av.cli_in_codigo = cli.cli_in_codigo;
+                    db.tb_avaliacao_cliente.Add(av);
+                    db.SaveChanges();
+                    Session["clienteID"] = cli.cli_in_codigo;
+                    Session["clienteNome"] = cli.cli_st_nome;
+                    return RedirectToAction("Home", "Cliente");
+                }
+            };
         }
 
-
-        //public ActionResult AlterarUsuario()
-        //{
-        //    int Id = Convert.ToInt32(Session["mercadoID"]);
-        //    using (EconobuyEntities db = new EconobuyEntities())
-        //    {
-        //        var alter = (from mer in db.tb_mercado
-        //                     join end in db.tb_endereco on
-        //                     mer.end_in_codigo equals end.end_in_codigo
-        //                     join merImg
-        //                     in db.tb_mercado_img on mer.mer_in_codigo
-        //                     equals merImg.mer_in_codigo
-        //                     where mer.mer_in_codigo == Id
-        //                     select new AlteraMercado
-        //                     {
-        //                         User = mer.mer_st_user,
-        //                         Senha = mer.mer_st_senha,
-        //                         Email = mer.mer_st_email,
-        //                         Telefone_1 = end.end_st_tel1,
-        //                         Telefone_2 = end.end_st_tel2,
-        //                         EndID = end.end_in_codigo,
-        //                         MerID = mer.mer_in_codigo,
-        //                         ImgID = merImg.mer_img_in_codigo
-        //                     });
-        //        if (alter != null)
-        //        {
-        //            AlteraMercado alt = alter.First();
-        //            return View(alt);
-        //        }
-        //        else return View();
-        //    }
-        //}
-
-        //[HttpPost]
-        //public ActionResult AlteraUsuario(AlteraMercado alt, HttpPostedFileBase imgMercado)
-        //{
-        //    HttpPostedFileBase file = Request.Files["img"];
-        //    if (file.ContentLength > 0) alt.imgMercado = ConvertToBytes(file);
-        //    using (EconobuyEntities db = new EconobuyEntities())
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return View("AlterarUsuario", alt);
-        //        }
-        //        else
-        //        {
-        //            tb_endereco end = db.tb_endereco.Find(alt.EndID);
-        //            tb_mercado mer = db.tb_mercado.Find(alt.MerID);
-        //            tb_mercado_img img = db.tb_mercado_img.Find(alt.ImgID);
-        //            if (alt != null)
-        //            {
-        //                mer.mer_st_user = alt.User;
-        //                mer.mer_st_senha = alt.Senha;
-        //                mer.mer_st_email = alt.Email;
-        //                end.end_st_tel1 = alt.Telefone_1;
-        //                end.end_st_tel2 = alt.Telefone_2;
-        //                if (alt.imgMercado != null) img.mer_img = alt.imgMercado;
-        //            }
-        //            db.SaveChanges();
-        //            return RedirectToAction("ConsultarProdutos", "Mercado");
-        //        }
-        //    }
-        //}
 
         public byte[] ConvertToBytes(HttpPostedFileBase image)
         {

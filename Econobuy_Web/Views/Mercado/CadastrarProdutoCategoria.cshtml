@@ -10,7 +10,7 @@
 }
 
 
-<p><btn>@Html.ActionLink("Nova Categoria", "CadastrarNovaCategoria", "Mercado", new { area = "" }, new { @style = "color: white; text-decoration:none; ", @class = "btn btn-warning" })</btn></p>
+<p><btn>@Html.ActionLink("Nova Categoria", "CadastrarNovaCategoria", "Mercado", new { id = Convert.ToInt32(TempData["Cat01ID"]), nome = TempData["Cat01"].ToString() }, new { @style = "color: white; text-decoration:none; ", @class = "btn btn-warning" })</btn></p>
 <table class="table  table-hover table-bordered bg-light">
     <tr class="bg-dark text-light">
         <th>
